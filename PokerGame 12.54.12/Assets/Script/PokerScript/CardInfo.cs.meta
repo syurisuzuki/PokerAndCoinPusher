@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 63a577d9a6fe84f4b8bda149fe58a4fa
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - anim: {instanceID: 0}
+  - Cardback: {fileID: 21300082, guid: 9190c64d3ba6e4b7781258d3100744f9, type: 3}
+  - Cdc: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

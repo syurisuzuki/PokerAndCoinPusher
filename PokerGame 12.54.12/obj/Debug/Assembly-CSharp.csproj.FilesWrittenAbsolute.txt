@@ -1,0 +1,7 @@
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/UnityEngine.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/UnityEditor.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/UnityEngine.UI.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/Mono.Cecil.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/nunit.framework.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/Unity.DataContract.dll
+/Users/clarine/2dunity_card/PokerGame/Temp/bin/Debug/ICSharpCode.NRefactory.dll

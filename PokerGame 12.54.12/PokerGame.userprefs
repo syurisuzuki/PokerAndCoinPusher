@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/PokerScript/Card.cs">
+    <Files>
+      <File FileName="Assets/Script/MedalGame/SideHall.cs" Line="17" Column="71" />
+      <File FileName="Assets/Script/MedalGame/Fieldcoin.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/MedalGame/Artifact.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/MedalGame/Fronthall.cs" Line="21" Column="27" />
+      <File FileName="Assets/Script/PokerScript/CardInfo.cs" Line="2" Column="26" />
+      <File FileName="Assets/Script/PokerScript/Card.cs" Line="910" Column="23" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
