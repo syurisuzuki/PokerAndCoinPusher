@@ -14,6 +14,10 @@ public class Card : MonoBehaviour {
 	[SerializeField] List<int> fieldCardMark = new List<int> ();
 	[SerializeField] List<GameObject> fieldCardObj = new List<GameObject> ();
 
+	List<int> fieldCardNum_Buck;
+	List<int> fieldCardMark_Buck;
+	List<GameObject> fieldCardObj_Buck;
+
 	//UI用の変数
 	[SerializeField] Text tex;
 
@@ -43,6 +47,10 @@ public class Card : MonoBehaviour {
 	int index = 0;
 
 	void Start () {
+		fieldCardObj_Buck = new List<GameObject> (fieldCardObj);
+		fieldCardNum_Buck = new List<int> (fieldCardNum);
+		fieldCardMark_Buck = new List<int> (fieldCardMark);
+
 		judge = GetComponent<Judge>();
 		audioSource = GetComponent<AudioSource> ();
 		turn = GetComponent<TouchMan>();
@@ -50,6 +58,17 @@ public class Card : MonoBehaviour {
 
 	void Update () {
 	}
+
+	public void InitGame(){
+		fieldCardNum = new List<int> (fieldCardNum_Buck);
+		fieldCardMark = new List<int> (fieldCardMark_Buck);
+		fieldCardObj = new List<GameObject> (fieldCardObj_Buck);
+		enemyd.InitAllListCPU ();
+		playerd.InitAllListPlayer ();
+		CpuParent.SendMessage ("removeAllciledrenCard");
+		PlayerParent.SendMessage ("removeAllciledrenCard");
+	}
+
 
 	/// <summary>
 	/// カードのドロー処理
@@ -68,15 +87,19 @@ public class Card : MonoBehaviour {
 		/// <param name="drawnum">Drawnum.</param>
 	IEnumerator DrawCards(int drawnum){
 
-	turn.Chenge_Draw_Turn ();
+		turn.Chenge_Draw_Turn ();
 
-	playerd = FindObjectOfType<Player>();
+		playerd = FindObjectOfType<Player>();
 
-	float xVec = cardInstantiateVector.x;
-	float yVec = cardInstantiateVector.y;
-	float zVec = cardInstantiateVector.z;
+		float xVec = cardInstantiateVector.x;
+		float yVec = cardInstantiateVector.y;
+		float zVec = cardInstantiateVector.z;
 
-	for (int h = 0; h < drawnum; h++) {
+		sendCardNum.Clear ();
+		sendCardMark.Clear ();
+		sendCardObj.Clear ();
+
+		for (int h = 0; h < drawnum; h++) {
 			//ランダムに取り出す
 			int cardnum = Random.Range (0, fieldCardNum.Count);
 
@@ -457,13 +480,13 @@ public class Card : MonoBehaviour {
 		int cpuStrong = judge.PokarHandsInt (enemyd.EnemyCardNum, enemyd.EnemyCardMark);
 
 		if(playerStrong>cpuStrong){
-			Debug.Log ("あなたのかち");
+			turn.WinLose ("PLAYER");
 		}
 		if(playerStrong==cpuStrong){
-			Debug.Log ("ドロー");
+			turn.WinLose ("DRAW");
 		}
 		if(playerStrong<cpuStrong){
-			Debug.Log ("あなたのまけ");
+			turn.WinLose ("ENEMY");
 		}
 
 	}

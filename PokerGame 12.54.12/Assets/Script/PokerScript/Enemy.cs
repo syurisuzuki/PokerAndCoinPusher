@@ -38,6 +38,13 @@ public class Enemy : MonoBehaviour {
 	
 	}
 
+	public void InitAllListCPU(){
+		EnemyCardMark.Clear ();
+		EnemyCardNum.Clear ();
+		EnemyCardObject.Clear ();
+	}
+
+
 	/// <summary>
 	/// CPUを親にする.
 	/// </summary>
@@ -117,6 +124,32 @@ public class Enemy : MonoBehaviour {
 		MainSpriteRenderer.sprite = Faces[15];
 	}
 
+	public int CPUParentBet(){
+		if(judge.IsFlush(EnemyCardMark) == true){
+			return 2;
+		}
+
+		if(judge.IsStraight(EnemyCardNum) == true){
+			return 2;
+		}
+
+		if(judge.IsThreeCard(EnemyCardNum) == true){
+			if(judge.IsFullHouse(EnemyCardNum) == true){
+				return 2;
+			}
+			return 2;
+		}
+
+		if(judge.IsPair(EnemyCardNum) == true){
+			if(judge.IsTwoPair(EnemyCardNum) == true){
+				return 2;
+			}
+			return 1;
+		}
+
+		return 1;
+	}
+
 	public int thinkBet(int nowhavemedal,int playerhavemedal){
 		if(nowhavemedal>playerhavemedal){
 			if(judge.IsFlush(EnemyCardMark) == true){
@@ -145,6 +178,37 @@ public class Enemy : MonoBehaviour {
 		}else{
 			int randamAI = Random.Range (1, 3);
 			return randamAI;
+		}
+	}
+
+	public bool DoCall(){
+		if(judge.IsFlush(EnemyCardMark) == true){
+			return true;
+		}
+
+		if(judge.IsStraight(EnemyCardNum) == true){
+			return true;
+		}
+
+		if(judge.IsThreeCard(EnemyCardNum) == true){
+			if(judge.IsFullHouse(EnemyCardNum) == true){
+				return true;
+			}
+			return true;
+		}
+
+		if(judge.IsPair(EnemyCardNum) == true){
+			if(judge.IsTwoPair(EnemyCardNum) == true){
+				return true;
+			}
+			return true;
+		}
+
+		int randamAI = Random.Range (0, 20);
+		if (randamAI > 5) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 

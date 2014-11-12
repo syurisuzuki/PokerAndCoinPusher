@@ -25,6 +25,13 @@ public class Player : MonoBehaviour {
 
 	}
 
+	public void InitAllListPlayer(){
+		handCardList.Clear ();
+		handCardNum.Clear ();
+		handCardMark.Clear ();
+	}
+
+
 	/// <summary>
 	/// プレイヤーを親にする.
 	/// </summary>
