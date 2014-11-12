@@ -3,11 +3,11 @@ using System.Collections;
 
 public class Cardparent : MonoBehaviour {
 
-		public Card card;
+	public Card card;
 
 	// Use this for initialization
 	void Start () {
-				card = GameObject.FindObjectOfType<Card>();
+		card = GameObject.FindObjectOfType<Card>();
 	}
 	
 	// Update is called once per frame
@@ -15,15 +15,13 @@ public class Cardparent : MonoBehaviour {
 	
 	}
 
-
-
-		public void RestartcardDel(){
-				foreach(Transform child in transform) {
-						GameObject target = child.gameObject;
-						Destroy (target);
-				}
-
-
+	/// <summary>
+	/// 子要素のオブジェクトを全て削除する.
+	/// </summary>
+	public void removeAllciledrenCard(){
+		foreach(Transform child in transform) {
+			GameObject target = child.gameObject;
+			Destroy (target);
 		}
-
+	}
 }
