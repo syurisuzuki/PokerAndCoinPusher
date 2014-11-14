@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// カードの情報.
+/// </summary>
 public class CardInfo : MonoBehaviour {
 	public int Mark;
 	public int Number;

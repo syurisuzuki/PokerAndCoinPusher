@@ -14,6 +14,7 @@ public class Card : MonoBehaviour {
 	[SerializeField] List<int> fieldCardMark = new List<int> ();
 	[SerializeField] List<GameObject> fieldCardObj = new List<GameObject> ();
 
+	//カードのバックアップ
 	List<int> fieldCardNum_Buck;
 	List<int> fieldCardMark_Buck;
 	List<GameObject> fieldCardObj_Buck;
@@ -28,41 +29,46 @@ public class Card : MonoBehaviour {
 	public AudioClip audioClip;
 	AudioSource audioSource;
 
-	string target = "Test";
-
 	//手札用の一時保存リスト
 	List<int> sendCardNum = new List<int> ();
 	List<int> sendCardMark = new List<int> ();
 	List<GameObject> sendCardObj = new List<GameObject> ();
 
+	//スクリプト
 	TouchMan turn;
 	Player playerd;
 	Enemy enemyd;
 	Judge judge;
 
+	//カードの親
 	public GameObject CpuParent;
 	public GameObject PlayerParent;
 
+	//CPUチェンジの処理に使う
 	int keyvalue = 0;
 	int index = 0;
 
 	void Start () {
+		//Listを全てコピー
 		fieldCardObj_Buck = new List<GameObject> (fieldCardObj);
 		fieldCardNum_Buck = new List<int> (fieldCardNum);
 		fieldCardMark_Buck = new List<int> (fieldCardMark);
 
+		//ゲットコンポーネントする
 		judge = GetComponent<Judge>();
 		audioSource = GetComponent<AudioSource> ();
 		turn = GetComponent<TouchMan>();
 	}
 
-	void Update () {
-	}
-
+	/// <summary>
+	/// ゲームの初期化.
+	/// </summary>
 	public void InitGame(){
 		fieldCardNum = new List<int> (fieldCardNum_Buck);
 		fieldCardMark = new List<int> (fieldCardMark_Buck);
 		fieldCardObj = new List<GameObject> (fieldCardObj_Buck);
+
+		//表示オブジェクトの削除
 		enemyd.InitAllListCPU ();
 		playerd.InitAllListPlayer ();
 		CpuParent.SendMessage ("removeAllciledrenCard");
@@ -75,7 +81,6 @@ public class Card : MonoBehaviour {
 	/// </summary>
 	/// <param name="drawnum">Drawnum.</param>
 	public void DrawCard(int drawnum){
-		Debug.Log ("DRAW!!!!!!");
 		StartCoroutine ("DrawCards",drawnum);
 	}
 
@@ -87,6 +92,7 @@ public class Card : MonoBehaviour {
 		/// <param name="drawnum">Drawnum.</param>
 	IEnumerator DrawCards(int drawnum){
 
+		//ステートをチェンジ
 		turn.Chenge_Draw_Turn ();
 
 		playerd = FindObjectOfType<Player>();
@@ -95,6 +101,7 @@ public class Card : MonoBehaviour {
 		float yVec = cardInstantiateVector.y;
 		float zVec = cardInstantiateVector.z;
 
+		//初期化
 		sendCardNum.Clear ();
 		sendCardMark.Clear ();
 		sendCardObj.Clear ();
@@ -113,7 +120,7 @@ public class Card : MonoBehaviour {
 			sendCardObj.Add (card);
 
 			//効果音の再生
-			//audioSource.PlayOneShot (audioClip);
+			audioSource.PlayOneShot (audioClip);
 
 			//カード情報の取得
 			int mark = card.GetComponent<CardInfo> ().Mark;
@@ -130,9 +137,8 @@ public class Card : MonoBehaviour {
 
 			yield return new WaitForSeconds(1);
 		}
-
-
-		Debug.Log (sendCardNum.Count);
+			
+		//リストを渡す
 		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj);
 
 		//一時保存用のリストを初期化
@@ -152,12 +158,10 @@ public class Card : MonoBehaviour {
 			card.name = "Card:" + h;
 			card.transform.parent = CpuParent.transform;
 			card.tag = "CpuCard";
-			Animator panim = card.GetComponent<Animator> ();
-			//panim.SetBool ("CardAnim", true);
 			sendCardObj.Add (card);
 
 			//効果音の再生
-			//audioSource.PlayOneShot (audioClip);
+			audioSource.PlayOneShot (audioClip);
 
 			//カード情報の取得
 			int mark = card.GetComponent<CardInfo> ().Mark;
@@ -175,19 +179,19 @@ public class Card : MonoBehaviour {
 			yield return new WaitForSeconds(0.5f);
 		}
 
+		//リストを渡す
 		enemyd.drawCardEnemy (sendCardNum, sendCardMark, sendCardObj);
 
-		if(judge.IsPair (sendCardNum) == true){
-			Debug.Log ("pair");
-		}else{
-			Debug.Log ("nopair");
-		}
-
+		//ステートをチェンジ
 		turn.Chenge_player_Turn ();
 		yield break;
 
 	}
 
+	/// <summary>
+	/// タッチされたカードを探す.
+	/// </summary>
+	/// <param name="target">Target.</param>
 	public void SerchIsTouched(string target){
 		if(target == "PLAYER"){
 			StartCoroutine ("ChengeCard", true);
@@ -196,6 +200,11 @@ public class Card : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// プレイヤー&CPUのカードの変更コルーチン
+	/// </summary>
+	/// <returns>The card.</returns>
+	/// <param name="player">If set to <c>true</c> player.</param>
 	IEnumerator ChengeCard(bool player){
 		int listn = 0;
 		int looping;
@@ -223,24 +232,24 @@ public class Card : MonoBehaviour {
 						listn = 4;
 					}
 
+					//削除
 					Destroy (playerd.handCardList [listn - looping]);
-
 					playerd.handCardList.RemoveAt (listn - looping);
 					playerd.handCardMark.RemoveAt (listn - looping);
 					playerd.handCardNum.RemoveAt (listn - looping);
 
+					//生成
 					int cardnum = Random.Range (0, fieldCardObj.Count);
 					playerd.handCardList.Add (fieldCardObj [cardnum]);
-
 					GameObject card = (GameObject)Instantiate (fieldCardObj[cardnum], cardVector, Quaternion.identity);
 					card.name = ""+listn;
 					card.tag="PlayerCard";
 					card.transform.parent = PlayerParent.transform;
 					Animator panim = card.GetComponent<Animator> ();
 					panim.SetBool ("CardAnim", true);
+					audioSource.PlayOneShot (audioClip);
 					int mark = card.GetComponent<CardInfo> ().Mark;
 					int cardn = card.GetComponent<CardInfo> ().Number;
-
 
 					playerd.handCardMark.Add (mark);
 					playerd.handCardNum.Add (cardn);
@@ -273,13 +282,11 @@ public class Card : MonoBehaviour {
 				break;
 			case 1:
 				//スリーカード残し
-
 				keyvalue = 0;
 				index = 0;
 
 				foreach(int i in enemyd.EnemyCardNum){
 					List<int> cardList = enemyd.EnemyCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
-					//Debug.Log ("count:" + cardList.Count);
 					if (cardList.Count == 3) {
 						keyvalue = i;
 					}
@@ -300,7 +307,6 @@ public class Card : MonoBehaviour {
 
 				foreach(int i in enemyd.EnemyCardNum){
 					List<int> cardList = enemyd.EnemyCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
-					//Debug.Log ("count:" + cardList.Count);
 					if (cardList.Count == 2) {
 						keyvalue = i;
 					}
@@ -412,7 +418,10 @@ public class Card : MonoBehaviour {
 		yield break;
 	}
 
-
+	/// <summary>
+	/// CPUカードのチェンジを行い、
+	/// オープンする.
+	/// </summary>
 	public void ChengeAndOpenCPUcards(){
 		int counts = enemyd.EnemyCardObject.Count;
 		int loopings = 0;
@@ -421,8 +430,6 @@ public class Card : MonoBehaviour {
 		for(int i = 0;i<counts;i++){
 			Vector3 cardVector = enemyd.EnemyCardObject [i - loopings].transform.position;
 			bool IsTouched = enemyd.EnemyCardObject [i - loopings].GetComponent<CardInfo> ().touched;
-
-			//Destroy (playerd.handCardList [i]);
 
 			if (IsTouched == false) {
 
@@ -474,10 +481,15 @@ public class Card : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// プレイヤーの役とCPUの役のジャッジを行う.
+	/// </summary>
 	public void JudgePokarHand(){
-		//プレイヤーの約判定
 		int playerStrong = judge.PokarHandsInt (playerd.handCardNum, playerd.handCardMark);
 		int cpuStrong = judge.PokarHandsInt (enemyd.EnemyCardNum, enemyd.EnemyCardMark);
+
+		Debug.Log (playerStrong);
+		Debug.Log (cpuStrong);
 
 		if(playerStrong>cpuStrong){
 			turn.WinLose ("PLAYER");

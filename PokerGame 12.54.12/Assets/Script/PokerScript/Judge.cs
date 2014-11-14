@@ -4,31 +4,24 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 
+/// <summary>
+/// 役の判定などを行うクラス.
+/// </summary>
 public class Judge : MonoBehaviour {
 
+	//ジョーカーのカウント
 	public int jokerCount;
+
+	//役の強さ
 	public int handStrong;
 
+	//リストの選定
 	private List<int> CNumList;
 	private List<int> CMarkList;
+	//ストレイト用に値を調整したリスト
 	private List<int> DamyList;
 
 	private int PairNum;
-
-	/// <summary>
-	/// 強さの判定
-	/// </summary>
-	/// <param name="plmag">Plmag.</param>
-	/*public void WinLose(float plmag){
-			money += Mathf.CeilToInt (bet * plmag);
-			PlayerPrefs.SetInt ("MONEY", money);
-			int debug = PlayerPrefs.GetInt ("MONEY", 100);
-			Debug.Log (debug);
-			bet = 0;
-			Money.text =money+"";
-			Bet.text = bet+"";
-			UIanim.SetBool ("Startpush",false);
-	}*/
 
 	/// <summary>
 	/// 所持カードリストのコピー.

@@ -2,14 +2,14 @@ fileFormatVersion: 2
 guid: 53bce4e01ff854a4199d22c6c2a6cf3b
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Nor
-    21300002: www
-    21300004: kuyasii
-    21300006: huhuhu
-    21300008: araara
-    21300010: egao
-    21300012: ga--n
-    21300014: naki
+    21300000: NORAMAL3
+    21300002: AORU
+    21300004: KUYASII2
+    21300006: HUHUHU
+    21300008: ARAARA
+    21300010: EGAO
+    21300012: GA-N
+    21300014: NAKIGAO
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -51,7 +51,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Nor
+    - name: NORAMAL3
       rect:
         serializedVersion: 2
         x: 0
@@ -61,7 +61,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: www
+    - name: AORU
       rect:
         serializedVersion: 2
         x: 96
@@ -71,7 +71,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: kuyasii
+    - name: KUYASII2
       rect:
         serializedVersion: 2
         x: 192
@@ -81,7 +81,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: huhuhu
+    - name: HUHUHU
       rect:
         serializedVersion: 2
         x: 288
@@ -91,7 +91,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: araara
+    - name: ARAARA
       rect:
         serializedVersion: 2
         x: 0
@@ -101,7 +101,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: egao
+    - name: EGAO
       rect:
         serializedVersion: 2
         x: 96
@@ -111,7 +111,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: ga--n
+    - name: GA-N
       rect:
         serializedVersion: 2
         x: 192
@@ -121,7 +121,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: naki
+    - name: NAKIGAO
       rect:
         serializedVersion: 2
         x: 288

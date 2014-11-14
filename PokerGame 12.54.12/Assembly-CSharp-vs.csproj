@@ -46,8 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Camerarect.cs" />
-     <Compile Include="Assets\MainGame.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -183,24 +181,8 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITexture.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\CandleLight.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\CycleCookiesTimer.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\Rotate.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\TriggerParticlesTimer.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\TriggerParticlesTouch.cs" />
-     <Compile Include="Assets\Party Pack\Scripts\TriggerSoundTouch.cs" />
-     <Compile Include="Assets\Script\BJ\BJDealer.cs" />
-     <Compile Include="Assets\Script\BJ\BJGame.cs" />
-     <Compile Include="Assets\Script\BJ\BJPlayer.cs" />
-     <Compile Include="Assets\Script\MedalGame\Artifact.cs" />
-     <Compile Include="Assets\Script\MedalGame\Fieldcoin.cs" />
-     <Compile Include="Assets\Script\MedalGame\Fronthall.cs" />
-     <Compile Include="Assets\Script\MedalGame\MedalTouch.cs" />
-     <Compile Include="Assets\Script\MedalGame\Money.cs" />
-     <Compile Include="Assets\Script\MedalGame\MoveWall.cs" />
-     <Compile Include="Assets\Script\MedalGame\SideHall.cs" />
-     <Compile Include="Assets\Script\MedalGame\VectorSave.cs" />
      <Compile Include="Assets\Script\PokerScript\BGM.cs" />
+     <Compile Include="Assets\Script\PokerScript\Camerarect.cs" />
      <Compile Include="Assets\Script\PokerScript\Card.cs" />
      <Compile Include="Assets\Script\PokerScript\CardInfo.cs" />
      <Compile Include="Assets\Script\PokerScript\Cardparent.cs" />
@@ -208,12 +190,21 @@
      <Compile Include="Assets\Script\PokerScript\Judge.cs" />
      <Compile Include="Assets\Script\PokerScript\Player.cs" />
      <Compile Include="Assets\Script\PokerScript\TouchMan.cs" />
-     <Compile Include="Assets\Script\PokerScript\Turn.cs" />
-     <Compile Include="Assets\Script\PokerScript\UITest.cs" />
      <Compile Include="Assets\Script\TitleScene.cs" />
-     <Compile Include="Assets\Taxmann.cs" />
-     <Compile Include="Assets\TestScript.cs" />
-     <Compile Include="Assets\enployeew.cs" />
+     <Compile Include="Assets\coin\MedalGameS\Artifact.cs" />
+     <Compile Include="Assets\coin\MedalGameS\Fieldcoin.cs" />
+     <Compile Include="Assets\coin\MedalGameS\Fronthall.cs" />
+     <Compile Include="Assets\coin\MedalGameS\MedalTouch.cs" />
+     <Compile Include="Assets\coin\MedalGameS\Money.cs" />
+     <Compile Include="Assets\coin\MedalGameS\MoveWall.cs" />
+     <Compile Include="Assets\coin\MedalGameS\SideHall.cs" />
+     <Compile Include="Assets\coin\MedalGameS\VectorSave.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\CandleLight.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\CycleCookiesTimer.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\Rotate.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\TriggerParticlesTimer.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\TriggerParticlesTouch.cs" />
+     <Compile Include="Assets\coin\Party Pack\Scripts\TriggerSoundTouch.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\ReadMe - 3.7.6.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
@@ -229,7 +220,7 @@
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (TextureClip).shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
-     <None Include="Assets\Party Pack\Sounds\Sounds License.txt" />
+     <None Include="Assets\coin\Party Pack\Sounds\Sounds License.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 1.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />

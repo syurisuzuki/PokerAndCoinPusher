@@ -9,10 +9,11 @@ using System.Linq;
 /// </summary>
 public class Player : MonoBehaviour {
 
-	Card cards;
+	public Card cards;
 	//ゲームの親か
 	public bool IsParent = true;
 
+	//リストの宣言
 	public List<GameObject> handCardList = new List<GameObject>();
 	public List<int> handCardNum = new List<int>();
 	public List<int> handCardMark = new List<int>();
@@ -25,6 +26,9 @@ public class Player : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// リストの初期化.
+	/// </summary>
 	public void InitAllListPlayer(){
 		handCardList.Clear ();
 		handCardNum.Clear ();

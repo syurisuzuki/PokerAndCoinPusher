@@ -51,10 +51,15 @@ public class TouchMan : MonoBehaviour {
 	public GameObject canvas;
 	public Animator UIanim;
 
+	//コールの有無
 	public bool continuecall = false;
 
+	//UIのstring
 	public string helpandhandstext;
 	public string cpucoment;
+
+	//exitbtnのオブジェクト
+	public GameObject exitbtn;
 
 
 	//タッチの有効無効を判断するbool
@@ -73,6 +78,7 @@ public class TouchMan : MonoBehaviour {
 
 
 	void Start () {
+
 		card = GetComponent<Card>();
 		UIanim = canvas.GetComponent<Animator> ();
 
@@ -90,6 +96,7 @@ public class TouchMan : MonoBehaviour {
 			Instantiate (Enemyp, new Vector3(-2,5.2f,0), Quaternion.identity);
 		}
 
+		//エネミースクリプトを取得
 		enemy = FindObjectOfType<Enemy>();
 
 		//テキストを変更する
@@ -128,6 +135,10 @@ public class TouchMan : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// 現在のステートに対するUIのアニメーションを
+	/// 行う.
+	/// </summary>
 	public void UI_Animation(){
 		//現在のステートでアニメーションを設定する
 		switch(nowTurn){
@@ -142,7 +153,6 @@ public class TouchMan : MonoBehaviour {
 			break;
 		case gameTurn.PLAYER_TURN:
 			UIanim.SetTrigger ("StatePLAYER");
-//UIanim.SetBool ("PlayerTurn", true);
 			break;
 		case gameTurn.RAISE_CALL_TURN:
 			if(whoisparenet == true){
@@ -156,10 +166,14 @@ public class TouchMan : MonoBehaviour {
 			UIanim.SetTrigger ("StateJUDGE");
 			break;
 		case gameTurn.CHENGE_TURN:
-			cpuCommenttext.text = enemy.ChengeCommentText ();
 			UIanim.SetTrigger ("StateCHENGE");
 			break;
 		case gameTurn.DROP_TURN:
+			if(whoisparenet == true){
+				whoisparenet = false;
+			}else{
+				whoisparenet = true;
+			}
 			UIanim.SetTrigger ("StateDROP");
 			break;
 		}
@@ -174,9 +188,10 @@ public class TouchMan : MonoBehaviour {
 		Debug.Log ("タッチが可能か:"+touch);
 	}
 
+	/// <summary>
+	/// ドローターンにチェンジする.
+	/// </summary>
 	public void Chenge_Draw_Turn(){
-		cpuCommenttext.text = "良いカードがきますように・・・!!";
-		pokarHandsAndHelptext.text = "カードを配っています...";
 		nowTurn = gameTurn.CARD_DRAW_TIME;
 		UI_Animation ();
 	}
@@ -202,8 +217,8 @@ public class TouchMan : MonoBehaviour {
 	/// </summary>
 	public void Chenge_player_Turn(){
 		if(whoisparenet == true){
-			cpuCommenttext.text = "あなたの親番ね、どうするの？";
-			pokarHandsAndHelptext.text = "あなたの親番　ベットを決めてください";
+			cpucoment = "あなたの親番ね、\nどうするの？";
+			pokarHandsAndHelptext.text = "あなたの親番ですベットを決めてください";
 			nowTurn = gameTurn.PLAYER_TURN;
 			UI_Animation ();
 		}else{
@@ -211,19 +226,17 @@ public class TouchMan : MonoBehaviour {
 			Debug.Log (bt);
 			cpuHavsMedalCount += cpuNowBets;
 			cpuNowBets += bt;
-			cpuHavsMedalCount -= bt;
-			helpandhandstext = "CPUの思考中";
+			cpuHavsMedalCount -= cpuNowBets;
+			cpucoment = "まあまあね♪";
+			enemy.ChengeFaceSprite (9);
+			helpandhandstext = "CPUのベットが決まりました。どうしますか？";
 			TextUpdate ();
 
 			nowTurn = gameTurn.RAISE_CALL_TURN;
 			UI_Animation ();
-
-			//CPUのべっとからぷれいやーのれいずこーる
 		}
 
 	}
-
-	//ボタン系の処理でボタンをタッチして呼び出す
 
 	/// <summary>
 	/// ベットボタン
@@ -233,6 +246,9 @@ public class TouchMan : MonoBehaviour {
 		if(playerHavsMedalCount>0){
 			playerHavsMedalCount--;
 			playeyNowBets++;
+			helpandhandstext = "ベット確定ボタンを押してください";
+			cpucoment = enemy.ChengeCommentCall ();
+			enemy.ChengeFaceSprite (15);
 			TextUpdate ();
 		}
 	}
@@ -241,21 +257,17 @@ public class TouchMan : MonoBehaviour {
 	/// ベットの決定ボタン.
 	/// </summary>
 	public void betDesideButton(){
-		if(playeyNowBets>0){
+		if(playeyNowBets>1){
 			switch(enemy.thinkBet(playerHavsMedalCount,cpuHavsMedalCount)){
 			case 0:
 				//ドロップ
 				playerHavsMedalCount += playeyNowBets;
 				playeyNowBets = 0;
 				cpuNowBets = 0;
-				cpucoment = "これはダメね、降りるわ";
+				cpucoment = "これはダメね、\n降りるわ";
+				enemy.ChengeFaceSprite (8);
 				helpandhandstext = "相手が降りました。";
 				TextUpdate ();
-				if(whoisparenet == true){
-					whoisparenet = false;
-				}else{
-					whoisparenet = true;
-				}
 
 				nowTurn = gameTurn.DROP_TURN;
 				UI_Animation ();
@@ -267,7 +279,8 @@ public class TouchMan : MonoBehaviour {
 				cpuNowBets = playeyNowBets;
 				cpuHavsMedalCount -= cpuNowBets;
 				cpucoment = "コールよ。";
-				helpandhandstext = "コールされました、継続します。カードを交換してください";
+				enemy.ChengeFaceSprite (12);
+				helpandhandstext = "コールされました。カードを交換してください";
 				TextUpdate ();
 				nowTurn = gameTurn.CHENGE_TURN;
 				UI_Animation ();
@@ -279,7 +292,8 @@ public class TouchMan : MonoBehaviour {
 				cpuHavsMedalCount += cpuNowBets;
 				cpuNowBets = playeyNowBets + 1;
 				cpuHavsMedalCount -= cpuNowBets;
-				cpucoment = "レイズよ。さぁ、どうするの？";
+				cpucoment = "レイズよ。\nさぁ、どうするの？";
+				enemy.ChengeFaceSprite (4);
 				helpandhandstext = "相手がレイズしました、どうしますか？";
 				TextUpdate ();
 				nowTurn = gameTurn.RAISE_CALL_TURN;
@@ -313,6 +327,9 @@ public class TouchMan : MonoBehaviour {
 			cpuHavsMedalCount += cpuNowBets;
 			cpuNowBets = playeyNowBets;
 			cpuHavsMedalCount -= cpuNowBets;
+			cpucoment ="レイズ!?\n乗るわその勝負。";
+			enemy.ChengeFaceSprite (13);
+			helpandhandstext = "残したいカードをタッチしてください。";
 			TextUpdate ();
 			nowTurn = gameTurn.CHENGE_TURN;
 			UI_Animation ();
@@ -320,6 +337,9 @@ public class TouchMan : MonoBehaviour {
 			playerHavsMedalCount += playeyNowBets;
 			playeyNowBets = 0;
 			cpuNowBets = 0;
+			cpucoment ="レイズ!?\n降りるわ";
+			enemy.ChengeFaceSprite (7);
+			helpandhandstext = "相手が降りました。";
 			TextUpdate ();
 			card.InitGame ();
 			nowTurn = gameTurn.DROP_TURN;
@@ -338,6 +358,9 @@ public class TouchMan : MonoBehaviour {
 			playerHavsMedalCount += playeyNowBets;
 			playeyNowBets = cpuNowBets;
 			playerHavsMedalCount -= playeyNowBets;
+			cpucoment ="へぇ、\nいいじゃない。";
+			enemy.ChengeFaceSprite (12);
+			helpandhandstext = "残したいカードをタッチしてください。";
 
 			TextUpdate ();
 
@@ -348,6 +371,9 @@ public class TouchMan : MonoBehaviour {
 			playerHavsMedalCount += playeyNowBets;
 			playeyNowBets = cpuNowBets;
 			playerHavsMedalCount -= playeyNowBets;
+			cpucoment ="へぇ、乗ってくるの？\nいいのかしら？";
+			enemy.ChengeFaceSprite (4);
+			helpandhandstext = "残したいカードをタッチしてください。";
 
 			TextUpdate ();
 			nowTurn = gameTurn.CHENGE_TURN;
@@ -361,11 +387,13 @@ public class TouchMan : MonoBehaviour {
 	public void dropButton(){
 		//レイズボタンの処理
 		playeyNowBets = 0;
+		cpuHavsMedalCount += cpuNowBets;
 		cpuNowBets = 0;
 		helpandhandstext = "勝負をおりました。";
-
+		cpucoment = "良い判断ね。";
+		enemy.ChengeFaceSprite (13);
 		TextUpdate ();
-
+			//card.InitGame ();
 		nowTurn = gameTurn.DROP_TURN;
 		UI_Animation ();
 	}
@@ -374,13 +402,19 @@ public class TouchMan : MonoBehaviour {
 	/// スタートボタン
 	/// </summary>
 	public void startButton(){
-	//スタートボタン
-	//ゲームのスタート
-	//各プレイヤーのドロー処理
 		if(playerHavsMedalCount <= 0 ||cpuHavsMedalCount <= 0){
-			//めだるないよ
+			exitbtn.SetActive (true);
+			if(playerHavsMedalCount<=0){
+				pokarHandsAndHelptext.text = "メダルがありません、あなたの負けです";
+			}
+
+			if(cpuHavsMedalCount <=0){
+				pokarHandsAndHelptext.text = "メダルがありません、あなたの勝ちです";
+			}
 		}else{
 			if(nowTurn == gameTurn.START_TURN){
+				cpucoment = "良いカードがきますように・・・";
+				enemy.ChengeFaceSprite (1);
 				helpandhandstext = "場代として1メダルをBETします";
 				playerHavsMedalCount -= 1;
 				cpuHavsMedalCount -= 1;
@@ -400,6 +434,8 @@ public class TouchMan : MonoBehaviour {
 	public void chengeButton(){
 			//チェンジボタン
 			//プレイヤー手札のタッチ済みのカードをチェンジする。
+		cpucoment = "さあ、勝負よ。";
+		enemy.ChengeFaceSprite (2);
 		card.SerchIsTouched ("PLAYER");
 	}
 
@@ -412,8 +448,20 @@ public class TouchMan : MonoBehaviour {
 		card.InitGame ();
 		nowTurn = gameTurn.START_TURN;
 		UI_Animation ();
+		cpucoment = "続けるのね、\nよろしく。";
+		enemy.ChengeFaceSprite (10);
+		TextUpdate ();
 	}
 
+	/// <summary>
+	/// ゲーム終了ボタン.
+	/// </summary>
+	public void ExitGameButton(){
+		Application.LoadLevel (0);
+	}
+	/// <summary>
+	/// テキストの内容を更新する.
+	/// </summary>
 	public void TextUpdate(){
 		cpuCommenttext.text = cpucoment;
 		playerHaveMedaltext.text = "残りメダル:" + playerHavsMedalCount;
@@ -423,34 +471,55 @@ public class TouchMan : MonoBehaviour {
 		pokarHandsAndHelptext.text = helpandhandstext;
 	}
 
-	public void Test2(){
+	/// <summary>
+	/// コインプッシャーのシーンへ移動.
+	/// </summary>
+	public void GoCoinPusherScene(){
 		Application.LoadLevel (2);
 	}
 
+	/// <summary>
+	/// 勝負結果に対してのメダル数の変更処理.
+	/// </summary>
+	/// <param name="winner">Winner.</param>
 	public void WinLose(string winner){
 		if(winner == "ENEMY"){
 			Debug.Log (winner);
 			cpuHavsMedalCount += cpuNowBets + playeyNowBets;
 			cpuNowBets = 0;
 			playeyNowBets = 0;
+			helpandhandstext = "あなたの負けです";
+			cpucoment = "あらあら、勝っちゃったわ。";
+			enemy.ChengeFaceSprite (13);
 			TextUpdate ();
 		}else if(winner == "PLAYER"){
 			Debug.Log (winner);
 			playerHavsMedalCount += cpuNowBets + playeyNowBets;
 			cpuNowBets = 0;
 			playeyNowBets = 0;
+			helpandhandstext = "あなたの勝ちです!";
+			cpucoment = "た、たまたまよ！次は勝つわ。";
+			enemy.ChengeFaceSprite (7);
 			TextUpdate ();
 		}else if(winner == "DRAW"){
 			Debug.Log (winner);
+			cpuHavsMedalCount += 1;
+			playerHavsMedalCount += 1;
 			cpuNowBets = 0;
 			playeyNowBets = 0;
+			helpandhandstext = "ドローです、場代は返還されます。";
+			cpucoment = "なかなかやるじゃない・・・";
+			enemy.ChengeFaceSprite (6);
 			TextUpdate ();
 		}
+
+		//親の変更
 		if(whoisparenet == true){
 			whoisparenet = false;
 		}else{
-			whoisparenet = false;
+			whoisparenet = true;
 		}
+
 		nowTurn = gameTurn.JUDGE_TURN;
 		UI_Animation ();
 	}

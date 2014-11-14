@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/// <summary>
+/// BGMを流すクラス.
+/// </summary>
 public class BGM : MonoBehaviour {
 
 	public AudioClip audioClip;

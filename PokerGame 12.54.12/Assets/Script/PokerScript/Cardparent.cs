@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// カードの親.
+/// </summary>
 public class Cardparent : MonoBehaviour {
 
 	public Card card;

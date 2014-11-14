@@ -4,59 +4,57 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 
-
+/// <summary>
+/// エネミークラス.
+/// </summary>
 public class Enemy : MonoBehaviour {
 
-	Card carde;
-	Judge judge;
+	public Card carde;
+	public Judge judge;
 	//ゲームの親か
-	[SerializeField] bool IsParent = false;
+	//[SerializeField] bool IsParent = false;
 
+	//カードの情報
 	public List<int> EnemyCardNum;
 	public List<int> EnemyCardMark;
 	public List<GameObject> EnemyCardObject;
 
+	//顔アイコン
 	SpriteRenderer MainSpriteRenderer;
 	public Sprite[] Faces;
+
+	//コメント
 	public Text coment;
 
+	//キーの値を格納する
 	public int useAIkeyValue1;
 	public int useAIkeyValue2;
 
 	// Use this for initialization
 	void Start () {
 		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-		//MainSpriteRenderer.sprite = Faces[9];
+		MainSpriteRenderer.sprite = Faces[9];
 				//coment.text = "よろしくね！";
 
 		judge = GetComponent<Judge> ();
 		carde = FindObjectOfType<Card>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	/// <summary>
+	/// CPUのFaceIconを変更する.
+	/// </summary>
+	/// <param name="index">Index.</param>
+	public void ChengeFaceSprite(int index){
+		MainSpriteRenderer.sprite = Faces[index];
 	}
 
+	/// <summary>
+	/// CPUの持つリストの全初期化
+	/// </summary>
 	public void InitAllListCPU(){
 		EnemyCardMark.Clear ();
 		EnemyCardNum.Clear ();
 		EnemyCardObject.Clear ();
-	}
-
-
-	/// <summary>
-	/// CPUを親にする.
-	/// </summary>
-	public void enemyIsParent(){
-		IsParent = true;
-	}
-
-	/// <summary>
-	/// CPUを親から外す.
-	/// </summary>
-	public void enemyNoParent(){
-		IsParent = false;
 	}
 
 	/// <summary>
@@ -73,8 +71,11 @@ public class Enemy : MonoBehaviour {
 			}
 	}
 
-	public string ChengeCommentText(){
-
+	/// <summary>
+	/// Call時のコメントの変更.
+	/// </summary>
+	/// <returns>The comment call.</returns>
+	public string ChengeCommentCall(){
 		string com = null;
 
 		if(judge.IsFlush(EnemyCardMark) == true){
@@ -89,7 +90,7 @@ public class Enemy : MonoBehaviour {
 		}
 
 		if(judge.IsPair(EnemyCardNum) == true){
-			com = "あちゃーこりゃだめね";
+			com = "あちゃーこりゃだめねー";
 			return com;
 		}
 
@@ -97,33 +98,11 @@ public class Enemy : MonoBehaviour {
 
 		return com;
 	}
-
-	public void FaceFirstDraw(){
-		//初期役ありなしで表情がよくなる&セリフへんか
-
-		if(judge.IsFlush(EnemyCardMark) == true){
-			coment.text = "ふふん♪いい感じね♪";
-			MainSpriteRenderer.sprite = Faces[10];
-			return;
-		}
-
-		if(judge.IsThreeCard(EnemyCardNum) == true){
-			coment.text = "あら、まぁまぁね!!";
-			MainSpriteRenderer.sprite = Faces[4];
-			return;
-		}
-
-		if(judge.IsPair(EnemyCardNum) == true){
-			coment.text = "あちゃーこりゃだめね";
-			MainSpriteRenderer.sprite = Faces[12];
-			return;
-		}
-						
-		//役なし沈黙
-		coment.text = "・・・";
-		MainSpriteRenderer.sprite = Faces[15];
-	}
-
+		
+	/// <summary>
+	/// CPUの親時のベット枚数.
+	/// </summary>
+	/// <returns>The parent bet.</returns>
 	public int CPUParentBet(){
 		if(judge.IsFlush(EnemyCardMark) == true){
 			return 2;
@@ -150,7 +129,15 @@ public class Enemy : MonoBehaviour {
 		return 1;
 	}
 
+	/// <summary>
+	/// コールかレイズかドロップかを返すint
+	/// </summary>
+	/// <returns>The bet.</returns>
+	/// <param name="nowhavemedal">Nowhavemedal.</param>
+	/// <param name="playerhavemedal">Playerhavemedal.</param>
 	public int thinkBet(int nowhavemedal,int playerhavemedal){
+
+		//2がレイズ1がコール0がドロップ
 		if(nowhavemedal>playerhavemedal){
 			if(judge.IsFlush(EnemyCardMark) == true){
 				return 2;
@@ -181,6 +168,10 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Callするかしないかのbool.
+	/// </summary>
+	/// <returns><c>true</c>, if call was done, <c>false</c> otherwise.</returns>
 	public bool DoCall(){
 		if(judge.IsFlush(EnemyCardMark) == true){
 			return true;
@@ -212,9 +203,12 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// チェンジするカードの選定を行う.
+	/// </summary>
+	/// <returns>The A.</returns>
 	public int ThinkAI(){
 		//場に残っているカードの取得
-
 		List<int> FieldCardsNum = new List<int> ();
 		List<int> FieldCardsMark = new List<int> ();
 
@@ -271,7 +265,6 @@ public class Enemy : MonoBehaviour {
 				return 3;
 				//1枚残し
 			}
-			Debug.Log ("ワンペア");
 			return 2;
 			//2枚残し
 		}

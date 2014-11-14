@@ -2,14 +2,14 @@ fileFormatVersion: 2
 guid: 3e02dfea3a3334d2ca55a979b67c075b
 TextureImporter:
   fileIDToRecycleName:
-    21300000: "\x10Normal"
-    21300002: angry
-    21300004: sad
-    21300006: bunann
-    21300008: tameiki
-    21300010: kusso
-    21300012: normal2
-    21300014: katiki
+    21300000: NORMAL
+    21300002: ANGRY
+    21300004: SAD
+    21300006: THINKING
+    21300008: TAMEIKI
+    21300010: KUYASII
+    21300012: NORMAL2
+    21300014: DOYAGAO
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -51,7 +51,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: "\x10Normal"
+    - name: NORMAL
       rect:
         serializedVersion: 2
         x: 0
@@ -61,7 +61,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: angry
+    - name: ANGRY
       rect:
         serializedVersion: 2
         x: 96
@@ -71,7 +71,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: sad
+    - name: SAD
       rect:
         serializedVersion: 2
         x: 192
@@ -81,7 +81,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: bunann
+    - name: THINKING
       rect:
         serializedVersion: 2
         x: 288
@@ -91,7 +91,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: tameiki
+    - name: TAMEIKI
       rect:
         serializedVersion: 2
         x: 0
@@ -101,7 +101,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: kusso
+    - name: KUYASII
       rect:
         serializedVersion: 2
         x: 96
@@ -111,7 +111,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: normal2
+    - name: NORMAL2
       rect:
         serializedVersion: 2
         x: 192
@@ -121,7 +121,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: katiki
+    - name: DOYAGAO
       rect:
         serializedVersion: 2
         x: 288
