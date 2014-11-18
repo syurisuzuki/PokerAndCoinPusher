@@ -75,33 +75,32 @@ public class Judge : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// ストレイトか否か
+	/// ストレイトか否か.
 	/// </summary>
 	/// <returns><c>true</c> if is straight the specified Numlist; otherwise, <c>false</c>.</returns>
 	/// <param name="Numlist">Numlist.</param>
 	public bool IsStraight(List<int> Numlist){
 	
-			CreateStraightList (Numlist);
+		CreateStraightList (Numlist);
 
-			int StartIndex = CountsJoker(DamyList);
-			int nowNumber = DamyList [StartIndex];
-			int jokercounts = CountsJoker (Numlist);
+		int StartIndex = CountsJoker(DamyList);
+		int nowNumber = DamyList [StartIndex];
 
-			for (int i = StartIndex; i < DamyList.Count; i++) {
-					while (nowNumber < DamyList [i]) {
-							if (jokercounts > 0) {
-									nowNumber++;
-									jokercounts--;
-									continue;
-							}
-							return false;
-					}
-					if (nowNumber == DamyList [i]) {
-							nowNumber++;
-							continue;
-					}
+		for (int i = StartIndex; i < DamyList.Count - 1; i++) {
+			if (nowNumber + 1 == DamyList [i + 1]) {
+				nowNumber++;
+				continue;
+			}else{
+				if (StartIndex > 0) {
+					nowNumber++;
+					StartIndex--;
+					continue;
+				}else{
+					return false;
+				}
 			}
-			return true;
+		}
+		return true;
 	}
 
 	/// <summary>
@@ -235,6 +234,12 @@ public class Judge : MonoBehaviour {
 			return false;
 	}
 
+	/// <summary>
+	/// ロイヤルストレートフラッシュ.
+	/// </summary>
+	/// <returns><c>true</c> if this instance is royal straight flush the specified num mark; otherwise, <c>false</c>.</returns>
+	/// <param name="num">Number.</param>
+	/// <param name="mark">Mark.</param>
 	public bool IsRoyalStraightFlush(List<int>num,List<int>mark){
 		//ジョーカーアリは認めない
 		if (CountsJoker (num) > 0) {

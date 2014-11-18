@@ -2,15 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/PokerScript/TouchMan.cs">
     <Files>
-      <File FileName="Assets/Script/PokerScript/TouchMan.cs" Line="451" Column="24" />
-      <File FileName="Assets/Script/PokerScript/Enemy.cs" Line="13" Column="8" />
-      <File FileName="Assets/Script/PokerScript/Card.cs" Line="35" Column="57" />
-      <File FileName="Assets/Script/PokerScript/Camerarect.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/PokerScript/CardInfo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/PokerScript/Cardparent.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/PokerScript/Judge.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/PokerScript/Player.cs" Line="12" Column="8" />
-      <File FileName="Assets/Script/PokerScript/BGM.cs" Line="4" Column="15" />
+      <File FileName="Assets/Script/PokerScript/TouchMan.cs" Line="433" Column="21" />
+      <File FileName="Assets/Script/PokerScript/Judge.cs" Line="90" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

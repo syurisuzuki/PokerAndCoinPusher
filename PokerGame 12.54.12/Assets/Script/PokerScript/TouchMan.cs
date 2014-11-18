@@ -178,16 +178,7 @@ public class TouchMan : MonoBehaviour {
 			break;
 		}
 	}
-
-	/// <summary>
-	/// タッチの有効化と無効化.
-	/// </summary>
-	/// <param name="touch">If set to <c>true</c> touch.</param>
-	public void touchEnableChenge(bool touch){
-		touchBool = touch;
-		Debug.Log ("タッチが可能か:"+touch);
-	}
-
+		
 	/// <summary>
 	/// ドローターンにチェンジする.
 	/// </summary>
@@ -402,6 +393,18 @@ public class TouchMan : MonoBehaviour {
 	/// スタートボタン
 	/// </summary>
 	public void startButton(){
+/*		Judge jud;
+		jud = FindObjectOfType<Judge>();
+
+		List<int> test = new List<int>();
+		test.Add (11);
+		test.Add (10);
+		test.Add (12);
+		test.Add (13);
+		test.Add (0);
+
+		Debug.Log (jud.IsStraight (test));*/
+
 		if(playerHavsMedalCount <= 0 ||cpuHavsMedalCount <= 0){
 			exitbtn.SetActive (true);
 			if(playerHavsMedalCount<=0){
@@ -426,17 +429,23 @@ public class TouchMan : MonoBehaviour {
 				card.DrawCard(5);
 			}
 		}
+
+		touchBool = false;
+
 	}
 
 	/// <summary>
 	/// チェンジボタン
 	/// </summary>
 	public void chengeButton(){
-			//チェンジボタン
-			//プレイヤー手札のタッチ済みのカードをチェンジする。
-		cpucoment = "さあ、勝負よ。";
-		enemy.ChengeFaceSprite (2);
-		card.SerchIsTouched ("PLAYER");
+		//プレイヤー手札のタッチ済みのカードをチェンジする。
+		if(touchBool == false){
+			cpucoment = "さあ、勝負よ。";
+			enemy.ChengeFaceSprite (2);
+			card.SerchIsTouched ("PLAYER");
+			touchBool = true;
+		}
+
 	}
 
 	/// <summary>
