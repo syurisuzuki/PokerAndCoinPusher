@@ -38,7 +38,7 @@ public class TitleScene : MonoBehaviour {
 	/// 説明シーンへ移動.
 	/// </summary>
 	public void GoInfoScene(){
-		Application.LoadLevel (3);
+		Application.LoadLevel (2);
 	}
 
 }

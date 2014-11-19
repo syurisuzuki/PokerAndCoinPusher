@@ -481,13 +481,6 @@ public class TouchMan : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// コインプッシャーのシーンへ移動.
-	/// </summary>
-	public void GoCoinPusherScene(){
-		Application.LoadLevel (2);
-	}
-
-	/// <summary>
 	/// 勝負結果に対してのメダル数の変更処理.
 	/// </summary>
 	/// <param name="winner">Winner.</param>
