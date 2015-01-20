@@ -241,6 +241,11 @@ public class TouchMan : MonoBehaviour {
 			cpucoment = enemy.ChengeCommentCall ();
 			enemy.ChengeFaceSprite (15);
 			TextUpdate ();
+			if(playeyNowBets == 3){
+				helpandhandstext = "これ以上ベット出来ません。";
+				TextUpdate ();
+				betDesideButton ();
+			}
 		}
 	}
 
