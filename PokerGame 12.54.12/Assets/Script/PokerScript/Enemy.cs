@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour {
 	public List<int> EnemyCardNum;
 	public List<int> EnemyCardMark;
 	public List<GameObject> EnemyCardObject;
+	public List<int> EnemyCardScore;
 
 	//顔アイコン
 	SpriteRenderer MainSpriteRenderer;
@@ -55,6 +56,7 @@ public class Enemy : MonoBehaviour {
 		EnemyCardMark.Clear ();
 		EnemyCardNum.Clear ();
 		EnemyCardObject.Clear ();
+		EnemyCardScore.Clear ();
 	}
 
 	/// <summary>
@@ -63,12 +65,21 @@ public class Enemy : MonoBehaviour {
 		/// <param name="numList">Number list.</param>
 		/// <param name="markList">Mark list.</param>
 		/// <param name="cardObj">Card object.</param>
-	public void drawCardEnemy(List<int> numList,List<int> markList,List<GameObject> cardObj){
+	public void drawCardEnemy(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList){
 		for(int i = 0;i<numList.Count;i++){
 			EnemyCardNum.Add (numList [i]);
 			EnemyCardMark.Add (markList [i]);
 			EnemyCardObject.Add (cardObj [i]);
+			EnemyCardScore.Add (scoreList [i]);
 			}
+	}
+
+	public void removeListc(int index){
+		EnemyCardObject.RemoveAt (index);
+	}
+
+	public void addListc(GameObject obj){
+		EnemyCardObject.Add(obj);
 	}
 
 	/// <summary>

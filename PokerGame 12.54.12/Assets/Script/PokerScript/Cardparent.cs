@@ -27,4 +27,13 @@ public class Cardparent : MonoBehaviour {
 			Destroy (target);
 		}
 	}
+
+	/*public int AttackPoint(){
+		int AttackPoints = 0;
+		foreach(Transform child in transform) {
+			int ap = child.gameObject.GetComponent<CardInfo> ().Score;
+		}
+		return AttackPoints;
+	}*/
+
 }

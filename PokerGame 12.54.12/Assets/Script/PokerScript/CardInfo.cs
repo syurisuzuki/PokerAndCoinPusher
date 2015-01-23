@@ -8,7 +8,13 @@ public class CardInfo : MonoBehaviour {
 	public int Mark;
 	public int Number;
 
+	public int Score;
+
+	public int Skill_Num;
+
 	public bool touched;
+
+	public bool isKira = false;
 
 	public Animator anim;
 	SpriteRenderer MainSpriteRenderer;
@@ -19,12 +25,14 @@ public class CardInfo : MonoBehaviour {
 	public GameObject Cdc;
 // Use this for initialization
 	void Start () {
+
 		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		realcard = gameObject.GetComponent<SpriteRenderer> ().sprite;
 		cardm = FindObjectOfType<Card>();
 		anim = GetComponent<Animator> ();
 		touched = false;
 		MainSpriteRenderer.sprite = Cardback;
+
 	}
 
 // Update is called once per frame
@@ -67,12 +75,15 @@ public class CardInfo : MonoBehaviour {
 			//Debug.Log ("消えるカード"+cardvec);
 			Destroy (this.gameObject);
 		}
-
 	}
 
 	public void CardAnimation(){
 		MainSpriteRenderer.sprite = realcard;
 		anim.SetBool("CardAnim",true);
+	}
+
+	public void StopParticleSystem(){
+		particleSystem.Stop ();
 	}
 
 }

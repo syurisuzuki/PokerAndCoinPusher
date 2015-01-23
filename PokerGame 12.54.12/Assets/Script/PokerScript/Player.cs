@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
 	public List<GameObject> handCardList = new List<GameObject>();
 	public List<int> handCardNum = new List<int>();
 	public List<int> handCardMark = new List<int>();
+	public List<int> handCardScore = new List<int>();
 
 	void Awake(){
 			cards = FindObjectOfType<Card>();
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour {
 		handCardList.Clear ();
 		handCardNum.Clear ();
 		handCardMark.Clear ();
+		handCardScore.Clear ();
 	}
 
 
@@ -56,12 +58,23 @@ public class Player : MonoBehaviour {
 	/// <param name="numList">Number list.</param>
 	/// <param name="markList">Mark list.</param>
 	/// <param name="cardObj">Card object.</param>
-	public void drawCard(List<int> numList,List<int> markList,List<GameObject> cardObj){
+	public void drawCard(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList){
 			for(int i = 0;i<numList.Count;i++){
 					handCardNum.Add (numList [i]);
 					handCardMark.Add (markList [i]);
 					handCardList.Add (cardObj [i]);
+			handCardScore.Add (scoreList [i]);
 			}
-			Debug.Log (handCardNum.Count);
+
+		//Debug.Log (handCardNum.Count);
 	}
+
+	public void removeListp(int index){
+		handCardList.RemoveAt (index);
+	}
+
+	public void addListp(GameObject obj){
+		handCardList.Add(obj);
+	}
+
 }

@@ -33,6 +33,8 @@ public class Card : MonoBehaviour {
 	List<int> sendCardNum = new List<int> ();
 	List<int> sendCardMark = new List<int> ();
 	List<GameObject> sendCardObj = new List<GameObject> ();
+	List<int> sendCardScore = new List<int> ();
+	List<int> sendCardSkill = new List<int> ();
 
 	//スクリプト
 	TouchMan turn;
@@ -115,6 +117,18 @@ public class Card : MonoBehaviour {
 			card.name = "Card:" + h;
 			card.tag = "PlayerCard";
 			card.transform.parent = PlayerParent.transform;
+
+			//キラカードの選定
+			int score = 0;
+			int kira = Random.Range (0, 10);
+			if(kira < 3){
+				card.GetComponent<CardInfo> ().isKira = true;
+				score += 5;
+			}else{
+				card.GetComponent<CardInfo>().StopParticleSystem();
+			}
+
+
 			Animator panim = card.GetComponent<Animator> ();
 			panim.SetBool ("CardAnim", true);
 			sendCardObj.Add (card);
@@ -126,25 +140,35 @@ public class Card : MonoBehaviour {
 			int mark = card.GetComponent<CardInfo> ().Mark;
 			int cardn = card.GetComponent<CardInfo>().Number;
 
+			//A->14変換
+			if(cardn==1){
+				score += 14;
+			}else{
+				score += cardn;
+			}
+
 			//カードのリストに加える
 			sendCardMark.Add (mark);
 			sendCardNum.Add (cardn);
+
+			sendCardScore.Add (score);
 
 			//場のカードから引いたカードを削除
 			fieldCardObj.RemoveAt (cardnum);
 			fieldCardNum.RemoveAt (cardnum);
 			fieldCardMark.RemoveAt (cardnum);
 
-			yield return new WaitForSeconds(1);
+			yield return new WaitForSeconds(0.5f);
 		}
 			
 		//リストを渡す
-		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj);
+		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj,sendCardScore);
 
 		//一時保存用のリストを初期化
 		sendCardNum.Clear ();
 		sendCardMark.Clear ();
 		sendCardObj.Clear ();
+		sendCardScore.Clear();
 
 		enemyd = FindObjectOfType<Enemy>();
 
@@ -160,6 +184,16 @@ public class Card : MonoBehaviour {
 			card.tag = "CpuCard";
 			sendCardObj.Add (card);
 
+			//キラカードの選定
+			int score = 0;
+			int kira = Random.Range (0, 10);
+			if(kira == 2){
+				card.GetComponent<CardInfo> ().isKira = true;
+				score += 5;
+			}else{
+				card.GetComponent<CardInfo>().StopParticleSystem();
+			}
+
 			//効果音の再生
 			audioSource.PlayOneShot (audioClip);
 
@@ -167,20 +201,27 @@ public class Card : MonoBehaviour {
 			int mark = card.GetComponent<CardInfo> ().Mark;
 			int cardn = card.GetComponent<CardInfo>().Number;
 
+			if(cardn==1){
+				score += 14;
+			}else{
+				score += cardn;
+			}
+				
 			//カードのリストに加える
 			sendCardMark.Add (mark);
 			sendCardNum.Add (cardn);
+			sendCardScore.Add(score);
 
 			//場のカードから引いたカードを削除
 			fieldCardObj.RemoveAt (cardnum);
 			fieldCardNum.RemoveAt (cardnum);
 			fieldCardMark.RemoveAt (cardnum);
 
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.3f);
 		}
 
 		//リストを渡す
-		enemyd.drawCardEnemy (sendCardNum, sendCardMark, sendCardObj);
+		enemyd.drawCardEnemy (sendCardNum, sendCardMark, sendCardObj,sendCardScore);
 
 		//ステートをチェンジ
 		turn.Chenge_player_Turn ();
@@ -234,29 +275,53 @@ public class Card : MonoBehaviour {
 
 					//削除
 					Destroy (playerd.handCardList [listn - looping]);
-					playerd.handCardList.RemoveAt (listn - looping);
-					playerd.handCardMark.RemoveAt (listn - looping);
-					playerd.handCardNum.RemoveAt (listn - looping);
+
+					playerd.removeListp (listn - looping);
 
 					//生成
 					int cardnum = Random.Range (0, fieldCardObj.Count);
-					playerd.handCardList.Add (fieldCardObj [cardnum]);
+
 					GameObject card = (GameObject)Instantiate (fieldCardObj[cardnum], cardVector, Quaternion.identity);
 					card.name = ""+listn;
 					card.tag="PlayerCard";
 					card.transform.parent = PlayerParent.transform;
+
+					//キラカードの選定
+					int score = 0;
+					int kira = Random.Range (0, 15);
+					if(kira < 6){
+						card.GetComponent<CardInfo> ().isKira = true;
+						score += 5;
+					}else{
+						card.GetComponent<CardInfo>().StopParticleSystem();
+					}
+
 					Animator panim = card.GetComponent<Animator> ();
 					panim.SetBool ("CardAnim", true);
 					audioSource.PlayOneShot (audioClip);
 					int mark = card.GetComponent<CardInfo> ().Mark;
 					int cardn = card.GetComponent<CardInfo> ().Number;
 
+					if(cardn==1){
+						score += 14;
+					}else{
+						score += cardn;
+					}
+
+
+					playerd.handCardMark.RemoveAt(listn - looping);
+					playerd.handCardNum.RemoveAt(listn - looping);
+					playerd.handCardScore.RemoveAt(listn - looping);
+
+					playerd.addListp (card);
+
 					playerd.handCardMark.Add (mark);
 					playerd.handCardNum.Add (cardn);
+					playerd.handCardScore.Add (score);
 
 					fieldCardObj.RemoveAt (cardnum);
 					looping++;
-					yield return new WaitForSeconds(1);
+					yield return new WaitForSeconds(0.5f);
 				}
 
 			}
@@ -445,27 +510,48 @@ public class Card : MonoBehaviour {
 					listindex = 4;
 				}
 
-				Destroy (enemyd.EnemyCardObject [listindex - loopings]);
-
-				enemyd.EnemyCardObject.RemoveAt (listindex - loopings);
-				enemyd.EnemyCardNum.RemoveAt (listindex - loopings);
-				enemyd.EnemyCardMark.RemoveAt (listindex - loopings);
+				Destroy (enemyd.EnemyCardObject [listindex- loopings]);
 
 				int cardnum = Random.Range (0, fieldCardObj.Count);
-				enemyd.EnemyCardObject.Add (fieldCardObj [cardnum]);
+
+				enemyd.removeListc (listindex - loopings);
 
 				GameObject card = (GameObject)Instantiate (fieldCardObj [cardnum], cardVector, Quaternion.identity);
 				card.name = "" + listindex;
 				card.tag = "CpuCard";
 				card.transform.parent = CpuParent.transform;
+
+				//キラカードの選定
+				int score = 0;
+				int kira = Random.Range (0, 10);
+				if(kira == 7){
+					card.GetComponent<CardInfo> ().isKira = true;
+					score += 5;
+				}else{
+					card.GetComponent<CardInfo>().StopParticleSystem();
+				}
+
 				Animator panim = card.GetComponent<Animator> ();
 				panim.SetBool ("CardAnim", true);
 				int mark = card.GetComponent<CardInfo> ().Mark;
 				int cardn = card.GetComponent<CardInfo> ().Number;
+				if(cardn==1){
+					score += 14;
+				}else{
+					score += cardn;
+				}
 
+				enemyd.EnemyCardNum.RemoveAt (listindex - loopings);
+				enemyd.EnemyCardMark.RemoveAt (listindex - loopings);
+				enemyd.EnemyCardScore.RemoveAt (listindex - loopings);
+				//enemyd.EnemyCardObject[i] = card;
 
 				enemyd.EnemyCardMark.Add (mark);
 				enemyd.EnemyCardNum.Add (cardn);
+				enemyd.EnemyCardScore.Add (score);
+
+
+				enemyd.addListc (card);
 
 				fieldCardObj.RemoveAt (cardnum);
 				loopings++;
@@ -502,5 +588,7 @@ public class Card : MonoBehaviour {
 		}
 
 	}
+
+
 
 }

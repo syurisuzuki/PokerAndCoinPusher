@@ -22,6 +22,8 @@ public class TouchMan : MonoBehaviour {
 	//カードのスクリプト
 	Card card;
 	Enemy enemy;
+	Player players;
+	Judge judges;
 
 	//UI用のテキストの宣言
 	public Text playerHaveMedaltext;
@@ -98,6 +100,7 @@ public class TouchMan : MonoBehaviour {
 
 		//エネミースクリプトを取得
 		enemy = FindObjectOfType<Enemy>();
+		players = FindObjectOfType<Player> ();
 
 		//テキストを変更する
 
@@ -113,7 +116,7 @@ public class TouchMan : MonoBehaviour {
 	void Update () {
 
 		//プレイヤーのターンの時にのみカードのタッチが可能
-		if(nowTurn == gameTurn.CHENGE_TURN){
+		if(touchBool == true){
 			if (Input.GetMouseButtonDown(0)) {
 
 				Vector3    aTapPoint   = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -166,6 +169,7 @@ public class TouchMan : MonoBehaviour {
 			UIanim.SetTrigger ("StateJUDGE");
 			break;
 		case gameTurn.CHENGE_TURN:
+			touchBool = true;
 			UIanim.SetTrigger ("StateCHENGE");
 			break;
 		case gameTurn.DROP_TURN:
@@ -241,7 +245,7 @@ public class TouchMan : MonoBehaviour {
 			cpucoment = enemy.ChengeCommentCall ();
 			enemy.ChengeFaceSprite (15);
 			TextUpdate ();
-			if(playeyNowBets == 3){
+			if(playeyNowBets == 2){
 				helpandhandstext = "これ以上ベット出来ません。";
 				TextUpdate ();
 				betDesideButton ();
@@ -398,17 +402,6 @@ public class TouchMan : MonoBehaviour {
 	/// スタートボタン
 	/// </summary>
 	public void startButton(){
-/*		Judge jud;
-		jud = FindObjectOfType<Judge>();
-
-		List<int> test = new List<int>();
-		test.Add (11);
-		test.Add (10);
-		test.Add (12);
-		test.Add (13);
-		test.Add (0);
-
-		Debug.Log (jud.IsStraight (test));*/
 
 		if(playerHavsMedalCount <= 0 ||cpuHavsMedalCount <= 0){
 			exitbtn.SetActive (true);
@@ -434,9 +427,6 @@ public class TouchMan : MonoBehaviour {
 				card.DrawCard(5);
 			}
 		}
-
-		touchBool = false;
-
 	}
 
 	/// <summary>
@@ -444,11 +434,11 @@ public class TouchMan : MonoBehaviour {
 	/// </summary>
 	public void chengeButton(){
 		//プレイヤー手札のタッチ済みのカードをチェンジする。
-		if(touchBool == false){
+		if(touchBool == true){
 			cpucoment = "さあ、勝負よ。";
 			enemy.ChengeFaceSprite (2);
 			card.SerchIsTouched ("PLAYER");
-			touchBool = true;
+			touchBool = false;
 		}
 
 	}
@@ -492,31 +482,79 @@ public class TouchMan : MonoBehaviour {
 	public void WinLose(string winner){
 		if(winner == "ENEMY"){
 			Debug.Log (winner);
-			cpuHavsMedalCount += cpuNowBets + playeyNowBets;
+
+			int Attackint = 0;
+
+			foreach (int score in enemy.EnemyCardScore) {
+				Attackint += score;
+			}
+
+			int damage = Attackint * cpuNowBets;
+
+			playerHavsMedalCount -= damage;
 			cpuNowBets = 0;
 			playeyNowBets = 0;
-			helpandhandstext = "あなたの負けです";
+			helpandhandstext = "YOU LOSE "+damage+" 失いました";
 			cpucoment = "あらあら、勝っちゃったわ。";
 			enemy.ChengeFaceSprite (13);
 			TextUpdate ();
 		}else if(winner == "PLAYER"){
-			Debug.Log (winner);
-			playerHavsMedalCount += cpuNowBets + playeyNowBets;
+
+			int Attackint = 0;
+
+			foreach(int score in players.handCardScore){
+				Attackint += score;
+			}
+
+			int damage = Attackint * playeyNowBets;
+
+			cpuHavsMedalCount -= damage;
 			cpuNowBets = 0;
 			playeyNowBets = 0;
-			helpandhandstext = "あなたの勝ちです!";
+			helpandhandstext = "YOU WIN "+damage+" 減らしました";
 			cpucoment = "た、たまたまよ！次は勝つわ。";
 			enemy.ChengeFaceSprite (7);
 			TextUpdate ();
 		}else if(winner == "DRAW"){
-			Debug.Log (winner);
-			cpuHavsMedalCount += 1;
-			playerHavsMedalCount += 1;
-			cpuNowBets = 0;
-			playeyNowBets = 0;
-			helpandhandstext = "ドローです、場代は返還されます。";
-			cpucoment = "なかなかやるじゃない・・・";
-			enemy.ChengeFaceSprite (6);
+			int pscore = 0;
+			int cpuscore = 0;
+
+			foreach(int score in players.handCardScore){
+				pscore += score;
+			}
+
+			foreach (int score in enemy.EnemyCardScore) {
+				cpuscore += score;
+			}
+
+			if(pscore > cpuscore){
+				int damage = pscore - cpuscore;
+
+				cpuHavsMedalCount -= damage;
+				cpuNowBets = 0;
+				playeyNowBets = 0;
+				helpandhandstext = "DRAW "+damage+" 減らしました";
+				cpucoment = "た、たまたまよ！";
+				enemy.ChengeFaceSprite (7);
+			}else if(pscore < cpuscore){
+				int damage = cpuscore - pscore;
+
+				playerHavsMedalCount -= damage;
+				cpuNowBets = 0;
+				playeyNowBets = 0;
+				helpandhandstext = "YOU LOSE "+damage+" 失いました";
+				cpucoment = "あらあら、勝っちゃったわ。";
+				enemy.ChengeFaceSprite (13);
+			}else{
+				cpuHavsMedalCount += 1;
+				playerHavsMedalCount += 1;
+				cpuNowBets = 0;
+				playeyNowBets = 0;
+				helpandhandstext = "ドローです、場代は返還されます。";
+				cpucoment = "なかなかやるじゃない・・・";
+				enemy.ChengeFaceSprite (6);
+			}
+
 			TextUpdate ();
 		}
 
