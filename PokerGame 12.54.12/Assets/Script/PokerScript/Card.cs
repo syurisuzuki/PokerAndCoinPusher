@@ -34,7 +34,7 @@ public class Card : MonoBehaviour {
 	List<int> sendCardMark = new List<int> ();
 	List<GameObject> sendCardObj = new List<GameObject> ();
 	List<int> sendCardScore = new List<int> ();
-	List<int> sendCardSkill = new List<int> ();
+	//List<int> sendCardSkill = new List<int> ();
 
 	//スクリプト
 	TouchMan turn;
