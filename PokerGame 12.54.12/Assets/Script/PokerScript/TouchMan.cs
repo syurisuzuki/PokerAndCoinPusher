@@ -31,6 +31,9 @@ public class TouchMan : MonoBehaviour {
 	public Text pokarHandsAndHelptext;
 	public Text cpuCommenttext;
 
+	public Text pScore;
+	public Text cScore;
+
 	//true:プレイヤーが親　false:CPUが親
 	public bool whoisparenet = true;
 
@@ -454,6 +457,8 @@ public class TouchMan : MonoBehaviour {
 		UI_Animation ();
 		cpucoment = "続けるのね、\nよろしく。";
 		enemy.ChengeFaceSprite (10);
+		pScore.text = "";
+		cScore.text = "";
 		TextUpdate ();
 	}
 
@@ -479,9 +484,11 @@ public class TouchMan : MonoBehaviour {
 	/// 勝負結果に対してのメダル数の変更処理.
 	/// </summary>
 	/// <param name="winner">Winner.</param>
-	public void WinLose(string winner){
+	public void WinLose(string winner,int pokarHandsScore){
 		if(winner == "ENEMY"){
 			Debug.Log (winner);
+
+			//アタック値の計算>CPUの所持カードの得点を取得しベットで乗算する
 
 			int Attackint = 0;
 
@@ -489,7 +496,9 @@ public class TouchMan : MonoBehaviour {
 				Attackint += score;
 			}
 
-			int damage = Attackint * cpuNowBets;
+			int damage = Attackint * cpuNowBets + pokarHandsScore;
+
+			pScore.text = "-"+damage;
 
 			playerHavsMedalCount -= damage;
 			cpuNowBets = 0;
@@ -500,13 +509,17 @@ public class TouchMan : MonoBehaviour {
 			TextUpdate ();
 		}else if(winner == "PLAYER"){
 
+			//アタック値の計算>PLAYERの所持カードの得点を取得しベットで乗算する
+
 			int Attackint = 0;
 
 			foreach(int score in players.handCardScore){
 				Attackint += score;
 			}
 
-			int damage = Attackint * playeyNowBets;
+			int damage = Attackint * playeyNowBets + pokarHandsScore;
+
+			cScore.text = "-"+damage;
 
 			cpuHavsMedalCount -= damage;
 			cpuNowBets = 0;
@@ -518,6 +531,8 @@ public class TouchMan : MonoBehaviour {
 		}else if(winner == "DRAW"){
 			int pscore = 0;
 			int cpuscore = 0;
+
+			//アタック値の計算>PLAYERとCPUのアタック値で大きい方から小さい方を引く
 
 			foreach(int score in players.handCardScore){
 				pscore += score;
@@ -533,7 +548,8 @@ public class TouchMan : MonoBehaviour {
 				cpuHavsMedalCount -= damage;
 				cpuNowBets = 0;
 				playeyNowBets = 0;
-				helpandhandstext = "DRAW "+damage+" 減らしました";
+				cScore.text = "-"+damage;
+				helpandhandstext = "DRAW-WIN "+damage+" 減らしました";
 				cpucoment = "た、たまたまよ！";
 				enemy.ChengeFaceSprite (7);
 			}else if(pscore < cpuscore){
@@ -542,7 +558,8 @@ public class TouchMan : MonoBehaviour {
 				playerHavsMedalCount -= damage;
 				cpuNowBets = 0;
 				playeyNowBets = 0;
-				helpandhandstext = "YOU LOSE "+damage+" 失いました";
+				pScore.text = "-"+damage;
+				helpandhandstext = "DRAW-LOSE "+damage+" 失いました";
 				cpucoment = "あらあら、勝っちゃったわ。";
 				enemy.ChengeFaceSprite (13);
 			}else{

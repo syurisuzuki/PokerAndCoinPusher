@@ -312,6 +312,57 @@ public class Judge : MonoBehaviour {
 
 	}
 
+	public int PokarHandsScore(int pokarHandid){
+		switch(pokarHandid){
+		case 0:
+			//ノーペア
+			return 1;
+			break;
+		case 1:
+			//ワンペア
+			return 5;
+			break;
+		case 2:
+			//ツーペア
+			return 9;
+			break;
+		case 3:
+			//スリーカード
+			return 14;
+			break;
+		case 4:
+			//ストレイト
+			return 16;
+			break;
+		case 5:
+			//フラッシュ
+			return 18;
+			break;
+		case 6:
+			//フルハウス
+			return 20;
+			break;
+		case 7:
+			//フォーカード
+			return 23;
+			break;
+		case 8:
+			//ストレイトフラッシュ
+			return 26;
+			break;
+		case 9:
+			//ファイブカード
+			return 30;
+			break;
+		case 10:
+			//ロイヤルストレートフラッシュ
+			return 35;
+			break;
+		default:
+			return 0;
+		}
+	}
+
 
 
 }

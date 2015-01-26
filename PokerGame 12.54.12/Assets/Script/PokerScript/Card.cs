@@ -578,13 +578,16 @@ public class Card : MonoBehaviour {
 		Debug.Log (cpuStrong);
 
 		if(playerStrong>cpuStrong){
-			turn.WinLose ("PLAYER");
+			int handscore = judge.PokarHandsScore (playerStrong);
+			turn.WinLose ("PLAYER",handscore);
 		}
 		if(playerStrong==cpuStrong){
-			turn.WinLose ("DRAW");
+			int handscore = judge.PokarHandsScore (playerStrong);
+			turn.WinLose ("DRAW",handscore);
 		}
 		if(playerStrong<cpuStrong){
-			turn.WinLose ("ENEMY");
+			int handscore = judge.PokarHandsScore (cpuStrong);
+			turn.WinLose ("ENEMY",handscore);
 		}
 
 	}
