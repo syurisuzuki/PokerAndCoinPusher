@@ -24,6 +24,7 @@ public class TouchMan : MonoBehaviour {
 	Enemy enemy;
 	Player players;
 	Judge judges;
+	EliceComent elice;
 
 	//UI用のテキストの宣言
 	public Text playerHaveMedaltext;
@@ -67,6 +68,9 @@ public class TouchMan : MonoBehaviour {
 	public GameObject exitbtn;
 
 
+	public int lovepoint;
+
+
 	//タッチの有効無効を判断するbool
 	public bool touchBool;
 
@@ -83,15 +87,13 @@ public class TouchMan : MonoBehaviour {
 
 
 	void Start () {
-
+		lovepoint = PlayerPrefs.GetInt("LP",0);
+		playerHavsMedalCount = PlayerPrefs.GetInt("PMedals",1000);
+		cpuHavsMedalCount = PlayerPrefs.GetInt("CMedals",1000);
 		card = GetComponent<Card>();
 		UIanim = canvas.GetComponent<Animator> ();
 
 		nowTurn = gameTurn.START_TURN;
-
-		//メダルの初期値を代入
-		cpuHavsMedalCount = startMedalCount;
-		playerHavsMedalCount = startMedalCount;
 
 		//プレイヤーをインスタンス化
 		Instantiate (Player, transform.position, Quaternion.identity);
@@ -104,6 +106,7 @@ public class TouchMan : MonoBehaviour {
 		//エネミースクリプトを取得
 		enemy = FindObjectOfType<Enemy>();
 		players = FindObjectOfType<Player> ();
+		elice = FindObjectOfType<EliceComent> ();
 
 		//テキストを変更する
 
@@ -158,6 +161,11 @@ public class TouchMan : MonoBehaviour {
 			UIanim.SetBool ("PlayerTurn", false);
 			break;
 		case gameTurn.PLAYER_TURN:
+
+			//po-ka-face
+
+
+
 			UIanim.SetTrigger ("StatePLAYER");
 			break;
 		case gameTurn.RAISE_CALL_TURN:
@@ -248,7 +256,7 @@ public class TouchMan : MonoBehaviour {
 			cpucoment = enemy.ChengeCommentCall ();
 			enemy.ChengeFaceSprite (15);
 			TextUpdate ();
-			if(playeyNowBets == 2){
+			if(playeyNowBets == 3){
 				helpandhandstext = "これ以上ベット出来ません。";
 				TextUpdate ();
 				betDesideButton ();
@@ -267,7 +275,9 @@ public class TouchMan : MonoBehaviour {
 				playerHavsMedalCount += playeyNowBets;
 				playeyNowBets = 0;
 				cpuNowBets = 0;
-				cpucoment = "これはダメね、\n降りるわ";
+
+				cpucoment = elice.dropcoment(lovepoint);
+
 				enemy.ChengeFaceSprite (8);
 				helpandhandstext = "相手が降りました。";
 				TextUpdate ();
@@ -281,7 +291,7 @@ public class TouchMan : MonoBehaviour {
 				cpuHavsMedalCount += cpuNowBets;
 				cpuNowBets = playeyNowBets;
 				cpuHavsMedalCount -= cpuNowBets;
-				cpucoment = "コールよ。";
+				cpucoment = elice.callcoment(lovepoint);
 				enemy.ChengeFaceSprite (12);
 				helpandhandstext = "コールされました。カードを交換してください";
 				TextUpdate ();
@@ -295,7 +305,7 @@ public class TouchMan : MonoBehaviour {
 				cpuHavsMedalCount += cpuNowBets;
 				cpuNowBets = playeyNowBets + 1;
 				cpuHavsMedalCount -= cpuNowBets;
-				cpucoment = "レイズよ。\nさぁ、どうするの？";
+				cpucoment = elice.raisecoment(lovepoint);
 				enemy.ChengeFaceSprite (4);
 				helpandhandstext = "相手がレイズしました、どうしますか？";
 				TextUpdate ();
@@ -330,7 +340,7 @@ public class TouchMan : MonoBehaviour {
 			cpuHavsMedalCount += cpuNowBets;
 			cpuNowBets = playeyNowBets;
 			cpuHavsMedalCount -= cpuNowBets;
-			cpucoment ="レイズ!?\n乗るわその勝負。";
+			cpucoment = elice.raisecallcoment(lovepoint);
 			enemy.ChengeFaceSprite (13);
 			helpandhandstext = "残したいカードをタッチしてください。";
 			TextUpdate ();
@@ -340,7 +350,7 @@ public class TouchMan : MonoBehaviour {
 			playerHavsMedalCount += playeyNowBets;
 			playeyNowBets = 0;
 			cpuNowBets = 0;
-			cpucoment ="レイズ!?\n降りるわ";
+			cpucoment = elice.dropcoment(lovepoint);
 			enemy.ChengeFaceSprite (7);
 			helpandhandstext = "相手が降りました。";
 			TextUpdate ();
@@ -388,15 +398,14 @@ public class TouchMan : MonoBehaviour {
 	/// ドロップボタンの処理.
 	/// </summary>
 	public void dropButton(){
-		//レイズボタンの処理
 		playeyNowBets = 0;
+		playerHavsMedalCount -= 50;
 		cpuHavsMedalCount += cpuNowBets;
 		cpuNowBets = 0;
 		helpandhandstext = "勝負をおりました。";
-		cpucoment = "良い判断ね。";
+		cpucoment = elice.PlayerDropcoment(lovepoint);
 		enemy.ChengeFaceSprite (13);
 		TextUpdate ();
-			//card.InitGame ();
 		nowTurn = gameTurn.DROP_TURN;
 		UI_Animation ();
 	}
@@ -405,7 +414,8 @@ public class TouchMan : MonoBehaviour {
 	/// スタートボタン
 	/// </summary>
 	public void startButton(){
-
+		lovepoint += 1;
+		PlayerPrefs.SetInt("LP",lovepoint);
 		if(playerHavsMedalCount <= 0 ||cpuHavsMedalCount <= 0){
 			exitbtn.SetActive (true);
 			if(playerHavsMedalCount<=0){
@@ -455,7 +465,7 @@ public class TouchMan : MonoBehaviour {
 		card.InitGame ();
 		nowTurn = gameTurn.START_TURN;
 		UI_Animation ();
-		cpucoment = "続けるのね、\nよろしく。";
+		cpucoment = elice.Continwecoment(lovepoint);
 		enemy.ChengeFaceSprite (10);
 		pScore.text = "";
 		cScore.text = "";
@@ -466,6 +476,9 @@ public class TouchMan : MonoBehaviour {
 	/// ゲーム終了ボタン.
 	/// </summary>
 	public void ExitGameButton(){
+		PlayerPrefs.SetInt("LP",lovepoint);
+		PlayerPrefs.SetInt ("Pmedals",1000);
+		PlayerPrefs.SetInt ("CMedals", 1000);
 		Application.LoadLevel (0);
 	}
 	/// <summary>
@@ -504,8 +517,9 @@ public class TouchMan : MonoBehaviour {
 			cpuNowBets = 0;
 			playeyNowBets = 0;
 			helpandhandstext = "YOU LOSE "+damage+" 失いました";
-			cpucoment = "あらあら、勝っちゃったわ。";
-			enemy.ChengeFaceSprite (13);
+			cpucoment = elice.Wincoment(lovepoint);
+			//enemy.ChengeFaceSprite (13);
+			lovepoint += 3;
 			TextUpdate ();
 		}else if(winner == "PLAYER"){
 
@@ -525,8 +539,9 @@ public class TouchMan : MonoBehaviour {
 			cpuNowBets = 0;
 			playeyNowBets = 0;
 			helpandhandstext = "YOU WIN "+damage+" 減らしました";
-			cpucoment = "た、たまたまよ！次は勝つわ。";
-			enemy.ChengeFaceSprite (7);
+			cpucoment = elice.Losecoment(lovepoint);
+			//enemy.ChengeFaceSprite (7);
+			lovepoint += 2;
 			TextUpdate ();
 		}else if(winner == "DRAW"){
 			int pscore = 0;
@@ -550,8 +565,10 @@ public class TouchMan : MonoBehaviour {
 				playeyNowBets = 0;
 				cScore.text = "-"+damage;
 				helpandhandstext = "DRAW-WIN "+damage+" 減らしました";
-				cpucoment = "た、たまたまよ！";
-				enemy.ChengeFaceSprite (7);
+				cpucoment = elice.Losecoment(lovepoint);
+				lovepoint += 2;
+				SaveMedal();
+				//enemy.ChengeFaceSprite (7);
 			}else if(pscore < cpuscore){
 				int damage = cpuscore - pscore;
 
@@ -560,16 +577,20 @@ public class TouchMan : MonoBehaviour {
 				playeyNowBets = 0;
 				pScore.text = "-"+damage;
 				helpandhandstext = "DRAW-LOSE "+damage+" 失いました";
-				cpucoment = "あらあら、勝っちゃったわ。";
-				enemy.ChengeFaceSprite (13);
+				cpucoment = elice.Wincoment(lovepoint);
+				lovepoint += 3;
+				SaveMedal();
+				//enemy.ChengeFaceSprite (13);
 			}else{
 				cpuHavsMedalCount += 1;
 				playerHavsMedalCount += 1;
 				cpuNowBets = 0;
 				playeyNowBets = 0;
 				helpandhandstext = "ドローです、場代は返還されます。";
-				cpucoment = "なかなかやるじゃない・・・";
-				enemy.ChengeFaceSprite (6);
+				cpucoment = elice.Drawcoment(lovepoint);
+				lovepoint += 1;
+				SaveMedal();
+				//enemy.ChengeFaceSprite (6);
 			}
 
 			TextUpdate ();
@@ -584,6 +605,12 @@ public class TouchMan : MonoBehaviour {
 
 		nowTurn = gameTurn.JUDGE_TURN;
 		UI_Animation ();
+	}
+
+
+	public void SaveMedal(){
+		PlayerPrefs.SetInt("PMedals",playerHavsMedalCount);
+		PlayerPrefs.SetInt("CMedals",cpuHavsMedalCount);
 	}
 
 			

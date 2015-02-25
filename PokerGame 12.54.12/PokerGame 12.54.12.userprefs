@@ -1,14 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/PokerScript/Card.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\PokerScript\EliceComent.cs">
     <Files>
-      <File FileName="Assets/Script/PokerScript/TouchMan.cs" Line="451" Column="25" />
-      <File FileName="Assets/Script/PokerScript/CardInfo.cs" Line="28" Column="3" />
-      <File FileName="Assets/Script/PokerScript/Card.cs" Line="37" Column="4" />
-      <File FileName="Assets/Script/PokerScript/Judge.cs" Line="315" Column="1" />
-      <File FileName="Assets/Script/PokerScript/Cardparent.cs" Line="1" Column="1" />
-      <File FileName="Assets/Script/PokerScript/Enemy.cs" Line="59" Column="27" />
-      <File FileName="Assets/Script/PokerScript/Player.cs" Line="37" Column="26" />
+      <File FileName="Assets\Script\PokerScript\Judge.cs" Line="319" Column="13" />
+      <File FileName="Assets\Script\PokerScript\TouchMan.cs" Line="112" Column="3" />
+      <File FileName="Assets\Script\PokerScript\CardInfo.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\PokerScript\Card.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\PokerScript\Cardparent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\PokerScript\Enemy.cs" Line="28" Column="21" />
+      <File FileName="Assets\Script\PokerScript\Player.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\PokerScript\EliceComent.cs" Line="224" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

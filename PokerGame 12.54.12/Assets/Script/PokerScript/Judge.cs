@@ -317,47 +317,36 @@ public class Judge : MonoBehaviour {
 		case 0:
 			//ノーペア
 			return 1;
-			break;
 		case 1:
 			//ワンペア
 			return 5;
-			break;
 		case 2:
 			//ツーペア
 			return 9;
-			break;
 		case 3:
 			//スリーカード
 			return 14;
-			break;
 		case 4:
 			//ストレイト
-			return 16;
-			break;
+			return 19;
 		case 5:
 			//フラッシュ
-			return 18;
-			break;
+			return 23;
 		case 6:
 			//フルハウス
-			return 20;
-			break;
+			return 30;
 		case 7:
 			//フォーカード
-			return 23;
-			break;
+			return 37;
 		case 8:
 			//ストレイトフラッシュ
-			return 26;
-			break;
+			return 45;
 		case 9:
 			//ファイブカード
-			return 30;
-			break;
+			return 50;
 		case 10:
 			//ロイヤルストレートフラッシュ
-			return 35;
-			break;
+			return 70;
 		default:
 			return 0;
 		}
