@@ -53,6 +53,7 @@
      <Compile Include="Assets\Script\PokerScript\Cardparent.cs" />
      <Compile Include="Assets\Script\PokerScript\EliceComent.cs" />
      <Compile Include="Assets\Script\PokerScript\Enemy.cs" />
+     <Compile Include="Assets\Script\PokerScript\InputMan.cs" />
      <Compile Include="Assets\Script\PokerScript\Judge.cs" />
      <Compile Include="Assets\Script\PokerScript\Player.cs" />
      <Compile Include="Assets\Script\PokerScript\TouchMan.cs" />

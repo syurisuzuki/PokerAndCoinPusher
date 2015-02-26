@@ -8,30 +8,59 @@ public class EliceComent : MonoBehaviour {
 
 	public string coment;
 
+	//Judge judge;
+
 	SpriteRenderer MainSpriteRenderer;
 	public Sprite[] Faces;
 
 	void Start(){
+		//judge = GetComponent<Judge>();
 		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-		MainSpriteRenderer.sprite = Faces[9];
+		MainSpriteRenderer.sprite = Faces[12];
 	}
 
 	public string pokarfacecoment(int lp ,int phand){
 		if (lp < 25) {
-			coment = "これはダメね";
-			FaceChenge(2);
+			if(phand<3){
+				coment = "これはダメね";
+				FaceChenge(2);
+			}else{
+				coment = "いまいちー";
+				FaceChenge(2);
+			}
+
 		} else if (25 <= lp && lp < 50) {
-			coment = "いまいちかなぁー";
-			FaceChenge(2);
+			if(phand<3){
+				coment = "いけるわ";
+				FaceChenge(2);
+			}else{
+				coment = "ちょっと…";
+				FaceChenge(2);
+			}
 		} else if (50 <= lp && lp < 75) {
-			coment = "いいカードが来ないよぉ…";
-			FaceChenge(13);
+			if(phand<3){
+				coment = "全然ダメ";
+				FaceChenge(2);
+			}else{
+				coment = "よさげね";
+				FaceChenge(2);
+			}
 		} else if (75 <= lp && lp < 100) {
-			coment = "つ、次は負けないんだから！！";
-			FaceChenge(0);
+			if(phand<3){
+				coment = "ちょっとキツイなー";
+				FaceChenge(2);
+			}else{
+				coment = "これはいける♪";
+				FaceChenge(4);
+			}
 		} else {
-			coment = "おりてあげるね。";
-			FaceChenge(4);
+			if(phand<3){
+				coment = "もう！ダメダメじゃない！！";
+				FaceChenge(9);
+			}else{
+				coment = "これは勝ったわ！！";
+				FaceChenge(4);
+			}
 		}
 		return coment;
 	}

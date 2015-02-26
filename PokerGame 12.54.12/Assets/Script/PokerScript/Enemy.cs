@@ -21,8 +21,8 @@ public class Enemy : MonoBehaviour {
 	public List<int> EnemyCardScore;
 
 	//顔アイコン
-	SpriteRenderer MainSpriteRenderer;
-	public Sprite[] Faces;
+	//SpriteRenderer MainSpriteRenderer;
+	//public Sprite[] Faces;
 
 	//コメント
 	public Text coment;
@@ -33,8 +33,8 @@ public class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-		MainSpriteRenderer.sprite = Faces[9];
+		//MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+		//MainSpriteRenderer.sprite = Faces[9];
 				//coment.text = "よろしくね！";
 
 		judge = GetComponent<Judge> ();
@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour {
 	/// </summary>
 	/// <param name="index">Index.</param>
 	public void ChengeFaceSprite(int index){
-		MainSpriteRenderer.sprite = Faces[index];
+		//MainSpriteRenderer.sprite = Faces[index];
 	}
 
 	/// <summary>
@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour {
 
 		if(judge.IsFlush(EnemyCardMark) == true){
 			com = "ふふん♪いい感じね♪";
-			MainSpriteRenderer.sprite = Faces[10];
+			//MainSpriteRenderer.sprite = Faces[10];
 			return com;
 		}
 
