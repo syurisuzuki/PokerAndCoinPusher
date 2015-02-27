@@ -100,7 +100,7 @@ public class TouchMan : MonoBehaviour {
 
 		//totalPlayerCount-1 の数だけEnemyをインスタンス化
 		for(int i = 0;i<totalPlayerCount - 1;i++){
-			Instantiate (Enemyp, new Vector3(-2,5.2f,0), Quaternion.identity);
+			Instantiate (Enemyp, new Vector3(-1.8f,5.2f,0), Quaternion.identity);
 		}
 
 		//エネミースクリプトを取得
@@ -282,7 +282,7 @@ public class TouchMan : MonoBehaviour {
 
 				cpucoment = elice.dropcoment(lovepoint);
 
-				enemy.ChengeFaceSprite (8);
+				//enemy.ChengeFaceSprite (8);
 				helpandhandstext = "相手が降りました。";
 				TextUpdate ();
 
@@ -296,8 +296,8 @@ public class TouchMan : MonoBehaviour {
 				cpuNowBets = playeyNowBets;
 				cpuHavsMedalCount -= cpuNowBets;
 				cpucoment = elice.callcoment(lovepoint);
-				enemy.ChengeFaceSprite (12);
-				helpandhandstext = "コールされました。カードを交換してください";
+				//enemy.ChengeFaceSprite (12);
+				helpandhandstext = "残したいカードをタッチしてください。";
 				TextUpdate ();
 				nowTurn = gameTurn.CHENGE_TURN;
 				UI_Animation ();
@@ -310,7 +310,7 @@ public class TouchMan : MonoBehaviour {
 				cpuNowBets = playeyNowBets + 1;
 				cpuHavsMedalCount -= cpuNowBets;
 				cpucoment = elice.raisecoment(lovepoint);
-				enemy.ChengeFaceSprite (4);
+				//enemy.ChengeFaceSprite (4);
 				helpandhandstext = "相手がレイズしました、どうしますか？";
 				TextUpdate ();
 				nowTurn = gameTurn.RAISE_CALL_TURN;
@@ -324,7 +324,8 @@ public class TouchMan : MonoBehaviour {
 		}else{
 			//ヘルプのテキストで別途させるテキストを表示
 			helpandhandstext = "ベットしてください!!";
-			TextUpdate ();
+			pokarHandsAndHelptext.text = helpandhandstext;
+			//TextUpdate ();
 		}
 	}
 
