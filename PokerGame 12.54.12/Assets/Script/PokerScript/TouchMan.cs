@@ -475,6 +475,7 @@ public class TouchMan : MonoBehaviour {
 		pScore.text = "";
 		cScore.text = "";
 		TextUpdate ();
+		SaveMedal ();
 	}
 
 	/// <summary>
@@ -482,7 +483,7 @@ public class TouchMan : MonoBehaviour {
 	/// </summary>
 	public void ExitGameButton(){
 		PlayerPrefs.SetInt("LP",lovepoint);
-		PlayerPrefs.SetInt ("Pmedals",1000);
+		PlayerPrefs.SetInt ("PMedals",1000);
 		PlayerPrefs.SetInt ("CMedals", 1000);
 		Application.LoadLevel (0);
 	}
@@ -607,7 +608,6 @@ public class TouchMan : MonoBehaviour {
 		nowTurn = gameTurn.JUDGE_TURN;
 		UI_Animation ();
 	}
-
 
 	public void SaveMedal(){
 		PlayerPrefs.SetInt("PMedals",playerHavsMedalCount);
