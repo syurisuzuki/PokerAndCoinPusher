@@ -83,7 +83,7 @@ public class CardInfo : MonoBehaviour {
 	}
 
 	public void StopParticleSystem(){
-		particleSystem.Stop ();
+		GetComponent<ParticleSystem>().Stop ();
 	}
 
 }
