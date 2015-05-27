@@ -8,6 +8,8 @@ public class CardInfo : MonoBehaviour {
 	public int Mark;
 	public int Number;
 
+	public int black;
+
 	public int Score;
 
 	public int Skill_Num;

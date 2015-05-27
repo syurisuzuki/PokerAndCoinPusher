@@ -10,6 +10,7 @@ using System.Linq;
 public class Player : MonoBehaviour {
 
 	public Card cards;
+	public Judge judgep;
 	//ゲームの親か
 	public bool IsParent = true;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Start(){
+		judgep = GetComponent<Judge> ();
 
 	}
 
@@ -75,6 +77,127 @@ public class Player : MonoBehaviour {
 
 	public void addListp(GameObject obj){
 		handCardList.Add(obj);
+	}
+
+	public int ThinkAIP(){
+		//場に残っているカードの取得
+		List<int> FieldCardsNum = new List<int> ();
+		List<int> FieldCardsMark = new List<int> ();
+
+		foreach(GameObject obj in handCardList){
+			int mark = obj.GetComponent<CardInfo> ().Mark;
+			int cardn = obj.GetComponent<CardInfo> ().Number;
+			FieldCardsMark.Add (mark);
+			FieldCardsNum.Add (cardn);
+		}
+
+		if(judgep.IsStraight(handCardNum) == true){
+			if(judgep.IsFlush(handCardMark)){
+				return 0;
+			}
+		}
+
+		//ファイブカード
+		if(judgep.IsFiveCard(handCardNum) == true){
+			return 0;
+		}
+
+		//フォーカード
+		if(judgep.IsFourCard(handCardNum) == true){
+			return 0;
+		}
+
+		//フルハウス
+		if(judgep.IsThreeCard(handCardNum) == true){
+			if(judgep.IsFullHouse(handCardNum) == true){
+				return 0;
+			}
+		}
+
+		//フラッシュ
+		if(judgep.IsFlush(handCardNum) == true){
+			return 0;
+		}
+
+		//ストレイト
+		if(judgep.IsStraight(handCardNum) == true){
+			return 0;
+		}
+
+		if(judgep.IsThreeCard(handCardNum) == true){
+			Debug.Log ("スリーカード");
+			return 1;
+			//3枚残し
+		}
+
+		//ツーペア&ワンペア
+		if(judgep.IsPair(handCardNum)== true){
+			if(judgep.IsTwoPair(handCardNum) == true){
+				Debug.Log ("ツーペア");
+				return 3;
+				//1枚残し
+			}
+			return 2;
+			//2枚残し
+		}
+
+		//フラッシュ可能か(手札に３枚以上あるか?)
+
+		//4 Spade 5 Heart 6 Dia 7 Clover 残し
+		List<int> CPUSpadeList = handCardMark.Select (c => c).Where (s => s == 3).ToList ();
+		List<int> CPUHeartList = handCardMark.Select (c => c).Where (s => s == 4).ToList ();
+		List<int> CPUDiaList = handCardMark.Select (c => c).Where (s => s == 2).ToList ();
+		List<int> CPUCloverList = handCardMark.Select (c => c).Where (s => s == 1).ToList ();
+
+		List<int> FieldSpadeList = FieldCardsMark.Select (c => c).Where (s => s == 3).ToList ();
+		List<int> FieldHeartList = FieldCardsMark.Select (c => c).Where (s => s == 4).ToList ();
+		List<int> FieldDiaList = FieldCardsMark.Select (c => c).Where (s => s == 2).ToList ();
+		List<int> FieldCloverList = FieldCardsMark.Select (c => c).Where (s => s == 1).ToList ();
+
+		int SpadeCounts = CPUSpadeList.Count + FieldSpadeList.Count;
+		int HeartCounts = CPUHeartList.Count + FieldHeartList.Count;
+		int DiaCounts = CPUDiaList.Count + FieldDiaList.Count;
+		int CloverCounts = CPUCloverList.Count + FieldCloverList.Count;
+
+		if(CPUSpadeList.Count>2){
+			return 4;
+		}
+
+		if(CPUHeartList.Count>2){
+			return 5;
+		}
+
+		if(CPUDiaList.Count>2){
+			return 6;
+		}
+
+		if(CPUCloverList.Count>2){
+			return 7;
+		}
+
+		//ジョーカー残し
+		if(judgep.CountsJoker(handCardNum) > 0){
+			return 8;
+		}
+
+		if(SpadeCounts>11){
+			return 4;
+		}
+
+		if(HeartCounts>11){
+			return 5;
+		}
+
+		if(DiaCounts>11){
+			return 6;
+		}
+
+		if(CloverCounts>11){
+			return 7;
+		}
+		//全チェンジ
+		return 9;
+
 	}
 
 }

@@ -116,6 +116,42 @@ public class Enemy : MonoBehaviour {
 	/// <returns>The parent bet.</returns>
 	public int CPUParentBet(){
 		if(judge.IsFlush(EnemyCardMark) == true){
+			return 3;
+		}
+
+		if(judge.IsStraight(EnemyCardNum) == true){
+			return 3;
+		}
+
+		if(judge.IsThreeCard(EnemyCardNum) == true){
+			if(judge.IsFullHouse(EnemyCardNum) == true){
+				return 3;
+			}
+			return 3;
+		}
+
+		if(judge.IsPair(EnemyCardNum) == true){
+			if(judge.IsTwoPair(EnemyCardNum) == true){
+				return 2;
+			}
+			return 1;
+		}
+
+		int ai = Random.Range (1, 4);
+
+		return ai;
+	}
+
+	/// <summary>
+	/// コールかレイズかドロップかを返すint
+	/// </summary>
+	/// <returns>The bet.</returns>
+	/// <param name="nowhavemedal">Nowhavemedal.</param>
+	/// <param name="playerhavemedal">Playerhavemedal.</param>
+	public int thinkBet(){
+	
+		//2がレイズ1がコール0がドロップ
+		if(judge.IsFlush(EnemyCardMark) == true){
 			return 2;
 		}
 
@@ -127,7 +163,7 @@ public class Enemy : MonoBehaviour {
 			if(judge.IsFullHouse(EnemyCardNum) == true){
 				return 2;
 			}
-			return 2;
+			return 1;
 		}
 
 		if(judge.IsPair(EnemyCardNum) == true){
@@ -137,46 +173,9 @@ public class Enemy : MonoBehaviour {
 			return 1;
 		}
 
-		return 1;
-	}
-
-	/// <summary>
-	/// コールかレイズかドロップかを返すint
-	/// </summary>
-	/// <returns>The bet.</returns>
-	/// <param name="nowhavemedal">Nowhavemedal.</param>
-	/// <param name="playerhavemedal">Playerhavemedal.</param>
-	public int thinkBet(int nowhavemedal,int playerhavemedal){
-
-		//2がレイズ1がコール0がドロップ
-		if(nowhavemedal>playerhavemedal){
-			if(judge.IsFlush(EnemyCardMark) == true){
-				return 2;
-			}
-
-			if(judge.IsStraight(EnemyCardNum) == true){
-				return 2;
-			}
-
-			if(judge.IsThreeCard(EnemyCardNum) == true){
-				if(judge.IsFullHouse(EnemyCardNum) == true){
-					return 2;
-				}
-				return 1;
-			}
-
-			if(judge.IsPair(EnemyCardNum) == true){
-				if(judge.IsTwoPair(EnemyCardNum) == true){
-					return 2;
-				}
-				return 1;
-			}
-
-			return 0;
-		}else{
-			int randamAI = Random.Range (1, 3);
-			return randamAI;
-		}
+		//ノーペアはランダム
+		int randamAI = Random.Range (0, 3);
+		return randamAI;
 	}
 
 	/// <summary>

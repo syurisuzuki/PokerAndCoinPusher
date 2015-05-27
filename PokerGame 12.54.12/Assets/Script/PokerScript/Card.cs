@@ -164,6 +164,10 @@ public class Card : MonoBehaviour {
 		//リストを渡す
 		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj,sendCardScore);
 
+		//ドロー時の約判定
+		int firsthands = judge.PokarHandsInt (sendCardNum, sendCardMark);
+		turn.NowhandsText (firsthands);
+
 		//一時保存用のリストを初期化
 		sendCardNum.Clear ();
 		sendCardMark.Clear ();
@@ -349,19 +353,20 @@ public class Card : MonoBehaviour {
 				//スリーカード残し
 				keyvalue = 0;
 				index = 0;
+				int ddd = 0; 
 
 				foreach(int i in enemyd.EnemyCardNum){
 					List<int> cardList = enemyd.EnemyCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
 					if (cardList.Count == 3) {
-						keyvalue = i;
+						keyvalue = ddd;
 					}
 				}
 
 				foreach(int i in enemyd.EnemyCardNum){
 					if(i == keyvalue){
-						enemyd.EnemyCardObject [index].SendMessage ("TouchCardCpu");
+						enemyd.EnemyCardObject [i].SendMessage ("TouchCardCpu");
 					}
-					index++;
+					ddd++;
 				}
 				ChengeAndOpenCPUcards ();
 				break;
@@ -579,17 +584,249 @@ public class Card : MonoBehaviour {
 
 		if(playerStrong>cpuStrong){
 			int handscore = judge.PokarHandsScore (playerStrong);
-			turn.WinLose ("PLAYER",handscore);
+			turn.WinLose ("PLAYER",playerStrong,cpuStrong,handscore);
 		}
 		if(playerStrong==cpuStrong){
 			int handscore = judge.PokarHandsScore (playerStrong);
-			turn.WinLose ("DRAW",handscore);
+			turn.WinLose ("DRAW",playerStrong,cpuStrong,handscore);
 		}
 		if(playerStrong<cpuStrong){
 			int handscore = judge.PokarHandsScore (cpuStrong);
-			turn.WinLose ("ENEMY",handscore);
+			turn.WinLose ("ENEMY",playerStrong,cpuStrong,handscore);
 		}
 
+	}
+
+	public void PlayerAllselect(){
+		playerd = FindObjectOfType<Player>();
+		foreach (GameObject obj in playerd.handCardList) {
+			if (obj.GetComponent<CardInfo> ().touched == false) {
+				obj.SendMessage ("TouchCard");
+			}
+		}
+	}
+
+	public void AutoSelectPlayerCard(){
+		//変数の初期化
+		int listnd = 0;
+		int loopingss= 0;
+		playerd = FindObjectOfType<Player>();
+
+		int count = playerd.handCardNum.Count;
+
+		Debug.Log (playerd.ThinkAIP ());
+
+		//タッチさせるためにスイッチで処理を分ける
+		switch(playerd.ThinkAIP()){
+
+		case 0:
+			//チェンジしない
+			foreach (GameObject obj in playerd.handCardList) {
+
+				if (obj.GetComponent<CardInfo> ().touched == false) {
+					obj.SendMessage ("TouchCard");
+				}
+
+
+			}
+			break;
+		case 1:
+			//スリーカード残し
+			keyvalue = 0;
+			index = 0;
+
+			foreach(int i in playerd.handCardNum){
+				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
+				if (cardList.Count == 3) {
+					keyvalue = i;
+				}
+			}
+
+			foreach(int i in playerd.handCardNum){
+				if (i == keyvalue || i == 0) {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				}
+				index++;
+
+			}
+			break;
+		case 2:
+			//ワンペア残し
+			keyvalue = 0;
+			index = 0;
+
+			foreach(int i in playerd.handCardNum){
+				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
+				if (cardList.Count == 2) {
+					keyvalue = i;
+					Debug.Log (keyvalue);
+				}
+			}
+
+			foreach(int i in playerd.handCardNum){
+				if(i == keyvalue || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					} 
+				}else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+				}
+				index++;
+			}
+			break;
+		case 3:
+			//ツーペア残し
+			keyvalue = 0;
+			index = 0;
+			int keyvaluetwo = 0;
+
+			foreach(int i in playerd.handCardNum){
+				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
+				if (cardList.Count == 2) {
+					keyvalue = i;
+				}
+			}
+
+			foreach(int i in playerd.handCardNum){
+				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i && s != keyvalue).ToList ();
+				if (cardList.Count == 2) {
+					keyvaluetwo = i;
+				}
+			}
+
+			foreach(int i in playerd.handCardNum){
+				if(i == keyvalue || i == keyvaluetwo || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+
+				}
+				index++;
+			}
+			break;
+		case 4:
+			//スペードのフラッシュ狙い3
+			index = 0;
+
+			foreach(int i in playerd.handCardMark){
+				if(i == 3 || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				}
+				index++;
+			}
+			break;
+		case 5:
+			//ハートのフラッシュ狙い4
+			index = 0;
+
+			foreach(int i in playerd.handCardMark){
+				if(i == 4 || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+				}
+				index++;
+			}
+			break;
+		case 6:
+			//ダイアのフラッシュ狙い2
+			index = 0;
+
+			foreach(int i in playerd.handCardMark){
+				if(i == 2 || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+						index++;
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+						index++;
+					}
+				}
+			}
+			break;
+		case 7:
+			//クローバーのフラッシュ狙い1
+			index = 0;
+
+			foreach(int i in playerd.handCardMark){
+				if(i == 1 || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				}
+				index++;
+			}
+			break;
+		case 8:
+			//ジョーカー残し
+			index = 0;
+
+			foreach(int i in playerd.handCardMark){
+				if(i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				}
+				index++;
+			}
+			break;
+		case 9:
+			//キラカードだけ残す
+			foreach (GameObject obj in playerd.handCardList) {
+				if (obj.GetComponent<CardInfo> ().isKira == true) {
+					if (obj.GetComponent<CardInfo> ().touched == false) {
+						obj.SendMessage ("TouchCard");
+					}
+
+				} else {
+					if (obj.GetComponent<CardInfo> ().touched == true) {
+						obj.SendMessage ("TouchCard");
+					}
+				}
+			}
+			break;
+		}
 	}
 
 
