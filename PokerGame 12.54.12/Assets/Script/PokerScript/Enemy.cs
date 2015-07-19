@@ -19,6 +19,12 @@ public class Enemy : MonoBehaviour {
 	public List<int> EnemyCardMark;
 	public List<GameObject> EnemyCardObject;
 	public List<int> EnemyCardScore;
+	public List<int> EnemyCardColor;
+
+	public int hp;
+	public int at;
+	public int de;
+	public int[] ac_Id;
 
 	//顔アイコン
 	//SpriteRenderer MainSpriteRenderer;
@@ -57,6 +63,7 @@ public class Enemy : MonoBehaviour {
 		EnemyCardNum.Clear ();
 		EnemyCardObject.Clear ();
 		EnemyCardScore.Clear ();
+		EnemyCardColor.Clear ();
 	}
 
 	/// <summary>
@@ -65,12 +72,13 @@ public class Enemy : MonoBehaviour {
 		/// <param name="numList">Number list.</param>
 		/// <param name="markList">Mark list.</param>
 		/// <param name="cardObj">Card object.</param>
-	public void drawCardEnemy(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList){
+	public void drawCardEnemy(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList,List<int> color){
 		for(int i = 0;i<numList.Count;i++){
 			EnemyCardNum.Add (numList [i]);
 			EnemyCardMark.Add (markList [i]);
 			EnemyCardObject.Add (cardObj [i]);
 			EnemyCardScore.Add (scoreList [i]);
+			EnemyCardColor.Add (color [i]);
 			}
 	}
 
@@ -173,9 +181,7 @@ public class Enemy : MonoBehaviour {
 			return 1;
 		}
 
-		//ノーペアはランダム
-		int randamAI = Random.Range (0, 3);
-		return randamAI;
+		return 0;
 	}
 
 	/// <summary>
@@ -263,7 +269,7 @@ public class Enemy : MonoBehaviour {
 		}
 
 		if(judge.IsThreeCard(EnemyCardNum) == true){
-			Debug.Log ("スリーカード");
+			//Debug.Log ("スリーカード");
 			return 1;
 			//3枚残し
 		}
@@ -271,7 +277,6 @@ public class Enemy : MonoBehaviour {
 		//ツーペア&ワンペア
 		if(judge.IsPair(EnemyCardNum)== true){
 			if(judge.IsTwoPair(EnemyCardNum) == true){
-				Debug.Log ("ツーペア");
 				return 3;
 				//1枚残し
 			}

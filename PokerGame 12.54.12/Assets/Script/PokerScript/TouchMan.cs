@@ -9,8 +9,6 @@ using System.Collections.Generic;
 /// </summary>
 public class TouchMan : MonoBehaviour {
 
-	//ゲームの現在のステート
-	[SerializeField] gameTurn nowTurn;
 	//ゲームの総プレイヤー人数
 	[SerializeField] int totalPlayerCount;
 
@@ -18,12 +16,11 @@ public class TouchMan : MonoBehaviour {
 	public GameObject Player;
 	//CPUオブジェクト
 	public GameObject Enemyp;
+	public GameObject[] Enemys;
 
 	//カードのスクリプト
 	Card card;
 	Enemy enemy;
-	Player players;
-	Judge judges;
 	EliceComent elice;
 
 	//UI用のテキストの宣言
@@ -44,15 +41,11 @@ public class TouchMan : MonoBehaviour {
 	public UIButton btn3;
 
 	//プレイヤー予想倍率
-	public int myyosou;
+	public float myyosou;
 	//敵予想倍率
 	public int enemyyosou;
-
-
-
-
-
-
+	public int nowgamecount;
+	public UILabel gamecountL;
 
 	//true:プレイヤーが親　false:CPUが親
 	public bool whoisparenet = true;
@@ -69,10 +62,6 @@ public class TouchMan : MonoBehaviour {
 	int cpuHavsMedalCount;
 	int playerHavsMedalCount;
 
-	//UIのキャンバスの宣言
-	public GameObject canvas;
-	public Animator UIanim;
-
 	//コールの有無
 	public bool continuecall = false;
 
@@ -82,13 +71,43 @@ public class TouchMan : MonoBehaviour {
 
 	//exitbtnのオブジェクト
 	public GameObject exitbtn;
-
-
-	public int lovepoint;
-
-
+	public int koukand;
 	//タッチの有効無効を判断するbool
 	public bool touchBool;
+	public UILabel p_hp;
+	public UILabel p_at;
+	public UILabel p_de;
+
+	public UILabel c_hp;
+	public UILabel c_at;
+	public UILabel c_de;
+
+	int php;
+	public int pat;
+	public int pde;
+
+	int chp;
+	public int cat;
+	public int cde;
+
+	public GameObject windowobj;
+	public GameObject chutoobj;
+
+	public UILabel p_heal;
+	public UILabel p_dam;
+
+	public UILabel c_heal;
+	public UILabel c_dam;
+
+	int specialitem;
+	bool reave;
+	bool healDouble;
+	bool noheal;
+	bool coinDouble;
+
+	string charalevel;
+
+	int bonus;
 
 	enum gameTurn{
 		START_TURN,
@@ -103,41 +122,130 @@ public class TouchMan : MonoBehaviour {
 
 
 	void Start () {
-		lovepoint = PlayerPrefs.GetInt("LP",0);
-		playerHavsMedalCount = PlayerPrefs.GetInt("PMedals",1000);
-		cpuHavsMedalCount = PlayerPrefs.GetInt("CMedals",1000);
-		card = GetComponent<Card>();
-		UIanim = canvas.GetComponent<Animator> ();
 
-		nowTurn = gameTurn.START_TURN;
+		noheal = false;
+		coinDouble = false;
+		reave = false;
+		healDouble = false;
+		nowgamecount = 0;
+		playerHavsMedalCount = 1000;
+		card = GetComponent<Card>();
 
 		//プレイヤーをインスタンス化
 		Instantiate (Player, transform.position, Quaternion.identity);
+		int chara = PlayerPrefs.GetInt ("selectChara", 1);
+		bonus = 1000 * chara;
+		string kokandkey = "Actor"+chara+"LovePoint";
+		koukand = PlayerPrefs.GetInt (kokandkey, 0);
+		Instantiate (Enemys[chara - 1], new Vector3(-1.6f,5.2f,0), Quaternion.identity);
 
-		//totalPlayerCount-1 の数だけEnemyをインスタンス化
-		for(int i = 0;i<totalPlayerCount - 1;i++){
-			Instantiate (Enemyp, new Vector3(-1.8f,5.2f,0), Quaternion.identity);
-		}
-
-		//エネミースクリプトを取得
 		enemy = FindObjectOfType<Enemy>();
-		players = FindObjectOfType<Player> ();
 		elice = FindObjectOfType<EliceComent> ();
-		judges = FindObjectOfType<Judge> ();
 
 		//テキストを変更する
 
-		gamecount.text = "残りゲーム数:" + gamecounts;
-		getmedals.text = "獲得メダル:" + getmedalcounts;
-		cpucomment.text = "よろしくね";
-		playerhandsandpoint.text = "スタートボタンを押してください。";
-		helpandenemyhandstext.text = "えええええ。";
+		gamecount.text = "現在のゲーム数:" + gamecounts;
+		getmedals.text = "所持メダル:" + playerHavsMedalCount;
+
+		specialitem = PlayerPrefs.GetInt ("Special", 0);
+
+		php = FindObjectOfType<Player> ().hp;
+		pat = FindObjectOfType<Player> ().attackPower;
+		pde = FindObjectOfType<Player> ().defence;
+
+		if (specialitem == 0) {
+		} else if (specialitem == 1) {
+			php *= 3;
+			PlayerPrefs.SetInt ("Special", 0);
+		} else if (specialitem == 2) {
+			pat *= 2;
+			PlayerPrefs.SetInt ("Special", 0);
+		}else if (specialitem == 3) {
+			pde *= 2;
+			PlayerPrefs.SetInt ("Special", 0);
+		}else if (specialitem == 6) {
+			pat *= 2;
+			pde *= 2;
+			noheal = true;
+			PlayerPrefs.SetInt ("Special", 0);
+		}else if (specialitem == 4) {
+			reave = true;
+			PlayerPrefs.SetInt ("Special", 0);
+		}else if (specialitem == 5) {
+			healDouble = true;
+			PlayerPrefs.SetInt ("Special", 0);
+		}else if (specialitem == 8) {
+			coinDouble = true;
+			PlayerPrefs.SetInt ("Special", 0);
+		}
+
+
+		p_hp.text = "HP:"+php;
+		p_at.text = "攻撃:"+pat;
+		p_de.text = "防御:"+pde;
+
+		chp = FindObjectOfType<Enemy> ().hp;
+		cat = FindObjectOfType<Enemy> ().at;
+		cde = FindObjectOfType<Enemy> ().de;
+
+		int music = Random.Range (0, 6);
+
+		switch (music) {
+		case 0:
+			Singleton<SoundPlayer>.instance.playBGM( "battle",0 );
+			break;
+		case 1:
+			Singleton<SoundPlayer>.instance.playBGM( "battle2",0 );
+			break;
+		case 2:
+			Singleton<SoundPlayer>.instance.playBGM( "battle3",0 );
+			break;
+		case 3:
+			Singleton<SoundPlayer>.instance.playBGM( "boss",0 );
+			break;
+		case 4:
+			Singleton<SoundPlayer>.instance.playBGM( "boss2",0 );
+			break;
+		case 5:
+			Singleton<SoundPlayer>.instance.playBGM( "boss3",0 );
+			break;
+		default:
+			break;
+		}
+
+
+		if (koukand < 100) {
+			charalevel = "Actor" + chara + "Level1";
+			cpucomment.text = FindObjectOfType<EliceComent>().l1hello;
+		} else if (koukand < 200 && koukand >= 100) {
+			charalevel = "Actor" + chara + "Level2";
+			cpucomment.text = FindObjectOfType<EliceComent>().l2hello;
+			chp *= 2;
+			cat *= 2;
+			cde *= 2;
+			bonus *= 2;
+		} else if (koukand >= 200) {
+			charalevel = "Actor" + chara + "Level3";
+			cpucomment.text = FindObjectOfType<EliceComent>().l3hello;
+			chp *= 3;
+			cat *= 3;
+			cde *= 3;
+			//elice.FaceChenge (4);
+			bonus *= 3;
+		}
+		c_hp.text = "HP:"+chp;
+		c_at.text = "攻撃:"+cat;
+		c_de.text = "防御:"+cde;
+
+		int chu = PlayerPrefs.GetInt ("GameIsChutorialEnd", 0);
+		if (chu == 0) {
+			ShowChutorial ();
+		}
 	
 	}
 
 	// Update is called once per frame
 	void Update () {
-
 		//プレイヤーのターンの時にのみカードのタッチが可能
 		if(touchBool == true){
 			if (Input.GetMouseButtonDown(0)) {
@@ -149,84 +257,63 @@ public class TouchMan : MonoBehaviour {
 					GameObject obj = aCollider2d.transform.gameObject;
 					switch(obj.tag){
 					case "PlayerCard":
-							Debug.Log (aCollider2d);
+						Singleton<SoundPlayer>.instance.playSE( "Touch" );
 							obj.SendMessage ("TouchCard");
 							break;
 					default:
-							Debug.Log ("touch(click)!! objectname:"+obj.name);
 							break;
 					}
 				}
 			}
 		}
-	}
-
-	/// <summary>
-	/// 現在のステートに対するUIのアニメーションを
-	/// 行う.
-	/// </summary>
-	public void UI_Animation(){
-	}
-		
-	/// <summary>
-	/// ドローターンにチェンジする.
-	/// </summary>
-	public void Chenge_Draw_Turn(){
-		nowTurn = gameTurn.CARD_DRAW_TIME;
-		UI_Animation ();
-	}
-
-	/// <summary>
-	/// スタートターンにチェンジする
-	/// </summary>
-	public void Chenge_Start_Turn(){
-		nowTurn = gameTurn.START_TURN;
-		UI_Animation ();
-	}
-
-	/// <summary>
-	/// ジャッジターンにチェンジする
-	/// </summary>
-	public void Chenge_Judge_Turn(){
-		nowTurn = gameTurn.JUDGE_TURN;
-		UI_Animation ();
-	}
-			
+	}		
 	/// <summary>
 	/// プレイヤーターンにチェンジする
 	/// </summary>
 	public void Chenge_player_Turn(){
 		if(whoisparenet == true){
-			int ph = judges.PokarHandsInt(enemy.EnemyCardNum,enemy.EnemyCardMark);
-			cpucoment = elice.pokarfacecoment(lovepoint,ph);
-			helpandenemyhandstext.text = "あなたの手は\nどうですか？";
 			PlayerBetter ();
-			//プレイヤー親の処理
-			//betさせる
-
-			nowTurn = gameTurn.PLAYER_TURN;
-			//UI_Animation ();
+			//nowTurn = gameTurn.PLAYER_TURN;
 		}else{
 			int bt = enemy.CPUParentBet ();
-			int ph = judges.PokarHandsInt(enemy.EnemyCardNum,enemy.EnemyCardMark);
-			cpucoment = elice.pokarfacecoment(lovepoint,ph);
-
-			string tdd = "sda";
-
 			switch (bt) {
 			case 1:
-				tdd = "自信満々";
+				if (koukand < 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l1raise;
+					elice.FaceChenge (7);
+				} else if (koukand <= 200 && koukand >= 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l2raise;
+					elice.FaceChenge (7);
+				} else if (koukand > 200) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l3raise;
+					elice.FaceChenge (7);
+				}
 				break;
 			case 2:
-				tdd = "自信あり";
+				if (koukand < 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l1call;
+					elice.FaceChenge (5);
+				} else if (koukand <= 200 && koukand >= 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l2call;
+					elice.FaceChenge (5);
+				} else if (koukand > 200) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l3call;
+					elice.FaceChenge (5);
+				}
 				break;
 			case 3:
-				tdd = "自信なし";
+				if (koukand < 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l1drop;
+					elice.FaceChenge (2);
+				} else if (koukand <= 200 && koukand >= 100) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l2drop;
+					elice.FaceChenge (2);
+				} else if (koukand > 200) {
+					cpucomment.text = FindObjectOfType<EliceComent>().l3drop;
+					elice.FaceChenge (2);
+				}
 				break;
 			}
-
-			helpandenemyhandstext.text = "相手は"+tdd+"\nのようです\nあなたの手は\nどうですか？";
-
 			Playerthink ();
 
 		}
@@ -234,57 +321,11 @@ public class TouchMan : MonoBehaviour {
 	}
 
 	void Playerthink(){
-		AllBtnEnable (true);
-		UILabel btntext;
-		btntext = btn1.GetComponentInChildren<UILabel> ();
-		btntext.text = "絶対負けない";
-		btntext = btn2.GetComponentInChildren<UILabel> ();
-		btntext.text = "自信ある";
-		btntext = btn3.GetComponentInChildren<UILabel> ();
-		btntext.text = "負けそう";
-		EventDelegate.Set(btn1.onClick, RaiseP);
-		EventDelegate.Set(btn2.onClick, CallP);
-		EventDelegate.Set(btn3.onClick, DropP);
+		myyosou = 1;
+		Invoke ("btnset", 0.5f);
 	}
 
 	void PlayerBetter(){
-		AllBtnEnable (true);
-		UILabel btntext;
-		btntext = btn1.GetComponentInChildren<UILabel> ();
-		btntext.text = "絶対負けない";
-		btntext = btn2.GetComponentInChildren<UILabel> ();
-		btntext.text = "自信ある";
-		btntext = btn3.GetComponentInChildren<UILabel> ();
-		btntext.text = "負けそう";
-		EventDelegate.Set(btn1.onClick, WinWinYosou);
-		EventDelegate.Set(btn2.onClick, WinYosou);
-		EventDelegate.Set(btn3.onClick, loseYosou);
-	}
-
-	void CallP(){
-		Invoke ("btnset", 1);
-	}
-
-	void RaiseP(){
-		Invoke ("btnset", 1);
-	}
-
-	void DropP(){
-		Invoke ("btnset", 1);
-	}
-
-
-	void WinWinYosou(){
-		myyosou = 3;
-		EnemyYosou (myyosou);
-	}
-
-	void WinYosou(){
-		myyosou = 2;
-		EnemyYosou (myyosou);
-	}
-
-	void loseYosou(){
 		myyosou = 1;
 		EnemyYosou (myyosou);
 	}
@@ -296,70 +337,61 @@ public class TouchMan : MonoBehaviour {
 	}
 
 	void btnset(){
-		helpandenemyhandstext.text = "カードを交換してください";
+		AllBtnEnable (true);
 		UILabel btntext;
-		btntext = btn1.GetComponentInChildren<UILabel> ();
+		btntext = btn3.GetComponentInChildren<UILabel> ();
 		btntext.text = "交換";
 		btntext = btn2.GetComponentInChildren<UILabel> ();
-		btntext.text = "オート選択";
-		btntext = btn3.GetComponentInChildren<UILabel> ();
-		btntext.text = "全残し";
-		EventDelegate.Set(btn1.onClick, CardChenge);
+		btntext.text = "自動選択";
+		btntext = btn1.GetComponentInChildren<UILabel> ();
+		btntext.text = "全て残す";
+		EventDelegate.Set(btn3.onClick, CardChenge);
 		EventDelegate.Set(btn2.onClick, SelectAuto);
-		EventDelegate.Set(btn3.onClick, SelectCancel);
+		EventDelegate.Set(btn1.onClick, SelectCancel);
 		touchBool = true;
 	}
 
-	void EnemyYosou(int playeryosou){
-
+	void EnemyYosou(float playeryosou){
 		//敵の予想の後にカードの交換へ
-		Invoke ("btnset", 1);
-
-
+		Invoke ("btnset", 0.5f);
 		switch(enemy.thinkBet()){
 		case 0:
 			//自信なし　等倍
-			enemyyosou = 1;
-			switch (playeryosou) {
-			case 1:
-				cpucomment.text = "自信なし自信なし";
-				break;
-			case 2:
-				cpucomment.text = "自信あり自信なし";
-				break;
-			case 3:
-				cpucomment.text = "自信超あり自信なし";
-				break;
+			if (koukand < 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1drop;
+				elice.FaceChenge (2);
+			} else if (koukand <= 200 && koukand >= 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l2drop;
+				elice.FaceChenge (2);
+			} else if (koukand > 200) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l3drop;
+				elice.FaceChenge (2);
 			}
 			break;
 		case 1:
 			//自信あり　２倍
-			enemyyosou = 2;
-			switch (playeryosou) {
-			case 1:
-				cpucomment.text = "自信なし自信あり";
-				break;
-			case 2:
-				cpucomment.text = "自信あり自信あり";
-				break;
-			case 3:
-				cpucomment.text = "自信超あり自信あり";
-				break;
+			if (koukand < 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1call;
+				elice.FaceChenge (5);
+			} else if (koukand <= 200 && koukand >= 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l2call;
+				elice.FaceChenge (5);
+			} else if (koukand > 200) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l3call;
+				elice.FaceChenge (5);
 			}
 			break;
 		case 2:
 			//自信あり　３倍
-			enemyyosou = 3;
-			switch (playeryosou) {
-			case 1:
-				cpucomment.text = "自信なし自信超あり";
-				break;
-			case 2:
-				cpucomment.text = "自信あり自信超あり";
-				break;
-			case 3:
-				cpucomment.text = "自信超あり自信超あり";
-				break;
+			if (koukand < 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1raise;
+				elice.FaceChenge (7);
+			} else if (koukand <= 200 && koukand >= 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1raise;
+				elice.FaceChenge (7);
+			} else if (koukand > 200) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1raise;
+				elice.FaceChenge (7);
 			}
 			break;
 		default:
@@ -371,196 +403,38 @@ public class TouchMan : MonoBehaviour {
 
 	void CardChenge(){
 		//プレイヤー手札のタッチ済みのカードをチェンジする。
-		cpucoment = "さあ、勝負よ。";
-		enemy.ChengeFaceSprite (2);
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
 		card.SerchIsTouched ("PLAYER");
 		touchBool = false;
 		AllBtnEnable (false);
 	}
 
 	void SelectAuto(){
-		//自動選択
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
 		card.AutoSelectPlayerCard ();
 	}
 
 	void SelectCancel(){
-		//全てタッチ
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
 		card.PlayerAllselect ();
 	}
 
-	/// <summary>
-	/// ベットボタン
-	/// </summary>
-	public void betButton(){
-		//押してベットが増える
-		if(playerHavsMedalCount>0){
-			playerHavsMedalCount--;
-			playeyNowBets++;
-			helpandhandstext = "ベット確定ボタンを押してください";
-			//cpucoment = enemy.ChengeCommentCall ();
-			//enemy.ChengeFaceSprite (15);
-			TextUpdate ();
-			if(playeyNowBets == 3){
-				helpandhandstext = "これ以上ベット出来ません。";
-				TextUpdate ();
-				betDesideButton ();
-			}
-		}
-	}
-
-	/// <summary>
-	/// ベットの決定ボタン.
-	/// </summary>
-	public void betDesideButton(){
-		if(playeyNowBets>1){
-			switch(enemy.thinkBet()){
-			case 0:
-				//ドロップ
-				playerHavsMedalCount += playeyNowBets;
-				playeyNowBets = 0;
-				cpuNowBets = 0;
-
-				cpucoment = elice.dropcoment(lovepoint);
-
-				//enemy.ChengeFaceSprite (8);
-				helpandhandstext = "相手が降りました。";
-				TextUpdate ();
-
-				nowTurn = gameTurn.DROP_TURN;
-				UI_Animation ();
-
-				break;
-			case 1:
-				//コール
-				cpuHavsMedalCount += cpuNowBets;
-				cpuNowBets = playeyNowBets;
-				cpuHavsMedalCount -= cpuNowBets;
-				cpucoment = elice.callcoment(lovepoint);
-				//enemy.ChengeFaceSprite (12);
-				helpandhandstext = "残したいカードをタッチしてください。";
-				TextUpdate ();
-				nowTurn = gameTurn.CHENGE_TURN;
-				UI_Animation ();
-
-				break;
-			case 2:
-				//レイズ
-				continuecall = true;
-				cpuHavsMedalCount += cpuNowBets;
-				cpuNowBets = playeyNowBets + 1;
-				cpuHavsMedalCount -= cpuNowBets;
-				cpucoment = elice.raisecoment(lovepoint);
-				//enemy.ChengeFaceSprite (4);
-				helpandhandstext = "相手がレイズしました、どうしますか？";
-				TextUpdate ();
-				nowTurn = gameTurn.RAISE_CALL_TURN;
-				UI_Animation ();
-
-				break;
-			default:
-				Debug.Log ("BetError");
-				break;
-			}
-		}else{
-			//ヘルプのテキストで別途させるテキストを表示
-			helpandhandstext = "ベットしてください!!";
-			helpandenemyhandstext.text = helpandhandstext;
-			//TextUpdate ();
-		}
-	}
-
-	/// <summary>
-	/// レイズボタンの処理.
-	/// </summary>
-	public void raiseButton(){
-		//レイズボタンの処理
-		playerHavsMedalCount += playeyNowBets;
-		playeyNowBets = cpuNowBets + 1;
-		playerHavsMedalCount -= playeyNowBets;
-
-		TextUpdate ();
-
-		//cpuはこーるするか？
-		if(enemy.DoCall() == true){
-			cpuHavsMedalCount += cpuNowBets;
-			cpuNowBets = playeyNowBets;
-			cpuHavsMedalCount -= cpuNowBets;
-			cpucoment = elice.raisecallcoment(lovepoint);
-			enemy.ChengeFaceSprite (13);
-			helpandhandstext = "残したいカードをタッチしてください。";
-			TextUpdate ();
-			nowTurn = gameTurn.CHENGE_TURN;
-			UI_Animation ();
-		}else{
-			playerHavsMedalCount += playeyNowBets;
-			playeyNowBets = 0;
-			cpuNowBets = 0;
-			cpucoment = elice.dropcoment(lovepoint);
-			enemy.ChengeFaceSprite (7);
-			helpandhandstext = "相手が降りました。";
-			TextUpdate ();
-			card.InitGame ();
-			nowTurn = gameTurn.DROP_TURN;
-			UI_Animation ();
-		}
-
-	}
-
-	/// <summary>
-	/// コールボタンの処理.
-	/// </summary>
-	public void callButton(){
-		//こーるボタンの処理
-		if(whoisparenet == true){
-			//totalPlayerCount += playeyNowBets;
-			playerHavsMedalCount += playeyNowBets;
-			playeyNowBets = cpuNowBets;
-			playerHavsMedalCount -= playeyNowBets;
-			cpucoment ="へぇ、\nいいじゃない。";
-			//enemy.ChengeFaceSprite (12);
-			helpandhandstext = "残したいカードをタッチしてください。";
-
-			TextUpdate ();
-
-			nowTurn = gameTurn.CHENGE_TURN;
-			UI_Animation ();
-
-		}else{
-			playerHavsMedalCount += playeyNowBets;
-			playeyNowBets = cpuNowBets;
-			playerHavsMedalCount -= playeyNowBets;
-			cpucoment ="へぇ、乗ってくるの？\nいいのかしら？";
-			//enemy.ChengeFaceSprite (4);
-			helpandhandstext = "残したいカードをタッチしてください。";
-
-			TextUpdate ();
-			nowTurn = gameTurn.CHENGE_TURN;
-			UI_Animation ();
-		}
-	}
-
-	/// <summary>
-	/// ドロップボタンの処理.
-	/// </summary>
-	public void dropButton(){
-		playeyNowBets = 0;
-		playerHavsMedalCount -= 50;
-		cpuHavsMedalCount += cpuNowBets;
-		cpuNowBets = 0;
-		helpandhandstext = "勝負をおりました。50メダル失いました";
-		cpucoment = elice.PlayerDropcoment(lovepoint);
-		enemy.ChengeFaceSprite (13);
-		TextUpdate ();
-		nowTurn = gameTurn.DROP_TURN;
-		UI_Animation ();
-	}
 
 	/// <summary>
 	/// スタートボタン
 	/// </summary>
 	public void startButton(){
-		lovepoint += 1;
-		PlayerPrefs.SetInt("LP",lovepoint);
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
+		if (koukand < 100) {
+			cpucomment.text = FindObjectOfType<EliceComent>().l1cardsend;
+			elice.FaceChenge (0);
+		} else if (koukand <= 200 && koukand >= 100) {
+			cpucomment.text = FindObjectOfType<EliceComent>().l2cardsend;
+			elice.FaceChenge (0);
+		} else if (koukand > 200) {
+			cpucomment.text = FindObjectOfType<EliceComent>().l3cardsend;
+			elice.FaceChenge (4);
+		}
 		card.DrawCard(5);
 		AllBtnEnable (false);
 	}
@@ -570,9 +444,8 @@ public class TouchMan : MonoBehaviour {
 	/// </summary>
 	public void chengeButton(){
 		//プレイヤー手札のタッチ済みのカードをチェンジする。
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
 		if(touchBool == true){
-			cpucoment = "さあ、勝負よ。";
-			enemy.ChengeFaceSprite (2);
 			card.SerchIsTouched ("PLAYER");
 			touchBool = false;
 		}
@@ -580,102 +453,92 @@ public class TouchMan : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// テキストの内容を更新する.
-	/// </summary>
-	public void TextUpdate(){
-		cpucomment.text = cpucoment;
-		helpandenemyhandstext.text = helpandhandstext;
-	}
-
-	/// <summary>
 	/// 勝負結果に対してのメダル数の変更処理.
 	/// </summary>
 	/// <param name="winner">Winner.</param>
-	public void WinLose(string winner,int playerhand,int cpuhand,int pokarHandsScore){
-		string phand = handintforstring (playerhand);
-		string cpuhandss = handintforstring(cpuhand);
+	public void WinLose(int pokarHandsScore_p,int enemy_p,int dds){
 
-		if(winner == "ENEMY"){
-			//アタック値の計算>CPUの所持カードの得点を取得しベットで乗算する
+		if (pokarHandsScore_p < 0) {
+			pokarHandsScore_p *= -1;
+			if (healDouble == true) {
+				int f = pokarHandsScore_p * 2;
+				p_heal.text = "+"+f;
+				php += f;
+			}
 
-			int Attackint = 0;
-
-			foreach (int score in enemy.EnemyCardScore) {
-				Attackint += score;
+			if (noheal == true) {
+				p_heal.text = "+0";
+			} else {
+				p_heal.text = "+"+pokarHandsScore_p;
+				php += pokarHandsScore_p;
 			}
 
 
-
-			helpandenemyhandstext.text = phand+"\nVS\n"+cpuhandss+"\nあなたの負け";
-
-			int damage = (Attackint + pokarHandsScore) * enemyyosou * myyosou;
-
-			cpucoment = elice.Wincoment(lovepoint);
-			//enemy.ChengeFaceSprite (13);
-		}else if(winner == "PLAYER"){
-
-			//アタック値の計算>PLAYERの所持カードの得点を取得しベットで乗算する
-
-			int Attackint = 0;
-
-			foreach(int score in players.handCardScore){
-				Attackint += score;
-			}
-
-			int damage = (Attackint + pokarHandsScore) * enemyyosou * myyosou;
-
-			helpandenemyhandstext.text = phand+"\nVS\n"+cpuhandss+"\nあなたの勝ち";
-			cpucoment = elice.Losecoment(lovepoint);
-			//enemy.ChengeFaceSprite (7);
-			lovepoint += 1;
-		}else if(winner == "DRAW"){
-			int pscore = 0;
-			int cpuscore = 0;
-
-			//アタック値の計算>PLAYERとCPUのアタック値で大きい方から小さい方を引く
-
-			foreach(int score in players.handCardScore){
-				pscore += score;
-			}
-
-			foreach (int score in enemy.EnemyCardScore) {
-				cpuscore += score;
-			}
-
-			if(pscore > cpuscore){
-				int damage = pscore - cpuscore;
-
-				cpuHavsMedalCount -= damage;
-				helpandenemyhandstext.text = pscore+"\nVS\n"+cpuscore+"\nあなたの勝ち";
-				cpucoment = elice.Losecoment(lovepoint);
-				SaveMedal();
-				//enemy.ChengeFaceSprite (7);
-			}else if(pscore < cpuscore){
-				int damage = cpuscore - pscore;
-
-				helpandenemyhandstext.text = pscore+"\nVS\n"+cpuscore+"\nあなたの負け";
-				cpucoment = elice.Wincoment(lovepoint);
-				SaveMedal();
-				//enemy.ChengeFaceSprite (13);
-			}else{
-				cpuHavsMedalCount += 1;
-				playerHavsMedalCount += 1;
-				cpuNowBets = 0;
-				playeyNowBets = 0;
-				helpandhandstext = "ドローです、場代は返還されます。";
-				cpucoment = elice.Drawcoment(lovepoint);
-				SaveMedal();
-				//enemy.ChengeFaceSprite (6);
-			}
+		} else {
+			c_dam.text = "-"+pokarHandsScore_p;
+			chp -= pokarHandsScore_p;
 		}
 
+		if(enemy_p < 0){
+			//回復
+			if (koukand < 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1heal;
+				elice.FaceChenge (4);
+			} else if (koukand <= 200 && koukand >= 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1heal;
+				elice.FaceChenge (4);
+			} else if (koukand > 200) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1heal;
+				elice.FaceChenge (4);
+			}
+
+		}else{
+			//攻撃
+			if (koukand < 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l1Attack;
+				elice.FaceChenge (1);
+			} else if (koukand <= 200 && koukand >= 100) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l2Attack;
+				elice.FaceChenge (1);
+			} else if (koukand > 200) {
+				cpucomment.text = FindObjectOfType<EliceComent>().l3Attack;
+				elice.FaceChenge (1);
+			}
+
+		}
+
+		if (enemy_p < 0) {
+			enemy_p *= -1;
+			c_heal.text = "+"+enemy_p;
+			chp += enemy_p;
+		} else {
+			p_dam.text = "-"+enemy_p;
+			php -= enemy_p; 
+		}
+
+		p_hp.text = "HP:" + php;
+		c_hp.text = "HP:" + chp;
+
+		int nowmedal = PlayerPrefs.GetInt ("MEDALS", 0);
+		if (coinDouble == true) {
+			nowmedal += (pokarHandsScore_p * 2);
+		} else {
+			nowmedal += pokarHandsScore_p;
+		}
+		PlayerPrefs.SetInt ("MEDALS",nowmedal);
+
+		if (chp <= 0) {
+			nowmedal = PlayerPrefs.GetInt ("MEDALS", 0);
+			nowmedal += 1000;
+			PlayerPrefs.SetInt ("MEDALS",nowmedal);
+			PlayerPrefs.SetInt (charalevel, 1);
+		}
 		//親の変更
 		if(whoisparenet == true){
 			whoisparenet = false;
 		}else{
 			whoisparenet = true;
 		}
-		nowTurn = gameTurn.JUDGE_TURN;
 
 		//継続するかしないか決める
 		UILabel btntext;
@@ -683,7 +546,7 @@ public class TouchMan : MonoBehaviour {
 		btntext.text = "続ける";
 		btn1.enabled = true;
 		btntext = btn2.GetComponentInChildren<UILabel> ();
-		btntext.text = "やめる";
+		btntext.text = "立ち去る";
 		btn2.enabled = true;
 		btntext = btn3.GetComponentInChildren<UILabel> ();
 		btntext.text = "";
@@ -697,29 +560,58 @@ public class TouchMan : MonoBehaviour {
 	/// コンティニューボタン
 	/// </summary>
 	public void continewButton(){
+		Singleton<SoundPlayer>.instance.playSE( "bclick" );
 		//コンティニューボタン
-		//プッシュ時にリスト及び全状態を初期化させる
-
-		if (gamecounts > 0) {
-			gamecounts--;
-			card.InitGame ();
-			nowTurn = gameTurn.START_TURN;
-			UI_Animation ();
-			cpucoment = elice.Continwecoment (lovepoint);
-			enemy.ChengeFaceSprite (10);
-
-			UILabel btntext;
-			btntext = btn1.GetComponentInChildren<UILabel> ();
-			btntext.text = "スタート";
-			btn1.enabled = true;
-			EventDelegate.Set(btn1.onClick, startButton);
+		p_heal.text = "";
+		c_heal.text = "";
+		c_dam.text = "";
+		c_dam.text = "";
+		//ここ
+		card.DeleteSkillWindow ();
 
 
-			TextUpdate ();
-			SaveMedal ();
+
+		if (php > 0&& chp > 0) {
+
+			if (nowgamecount == 10000) {
+
+			} else {
+				gamecounts++;
+				card.InitGame ();
+				//nowTurn = gameTurn.START_TURN;
+				UILabel btntext;
+				btntext = btn1.GetComponentInChildren<UILabel> ();
+				btntext.text = "";
+				btntext = btn2.GetComponentInChildren<UILabel> ();
+				btntext.text = "";
+				btn1.enabled = false;
+				btn2.enabled = false;
+				EventDelegate.Set(btn1.onClick, startButton);
+			}
 		
 		} else {
-			helpandenemyhandstext.text = "ゲーム終了です";
+			if (php <= 0) {
+				helpandenemyhandstext.text = "あなたの負けです";
+				if (reave == true) {
+					php = 1000;
+					reave = false;
+					card.InitGame ();
+					//nowTurn = gameTurn.START_TURN;
+					UILabel btntext;
+					btntext = btn1.GetComponentInChildren<UILabel> ();
+					btntext.text = "スタート";
+					btn1.enabled = true;
+					EventDelegate.Set(btn1.onClick, startButton);
+				}
+			} else {
+				helpandenemyhandstext.text = "あなたの勝ちです!!\nボーナスで"+bonus+"コイン獲得!!";
+				int nowmedal = PlayerPrefs.GetInt ("MEDALS", 0);
+
+				nowmedal += bonus;
+				PlayerPrefs.SetInt ("MEDALS",nowmedal);
+				PlayerPrefs.SetInt (charalevel, 1);
+			}
+
 			btn1.enabled = false;
 		}
 
@@ -730,103 +622,56 @@ public class TouchMan : MonoBehaviour {
 	/// ゲーム終了ボタン.
 	/// </summary>
 	public void ExitGameButton(){
-		PlayerPrefs.SetInt("LP",lovepoint);
-		PlayerPrefs.SetInt ("HaveMedals",getmedalcounts);
-		Application.LoadLevel (0);
+
+		Singleton<SoundPlayer>.instance.playSE( "click" );
+		Application.LoadLevel ("CharaSelect");
 	}
 
-
-
-	public void SaveMedal(){
-		PlayerPrefs.SetInt("PMedals",playerHavsMedalCount);
-		PlayerPrefs.SetInt("CMedals",cpuHavsMedalCount);
-	}
-
-	public static string handintforstring(int id){
+	public string handintforstring(int id){
 		switch (id) {
 		case 0:
 			return "ノーペア";
-			break;
 		case 1:
 			return "ワンペア";
-			break;
 		case 2:
-			return "ツーペア";
-			break;
-		case 3:
 			return "スリーカード";
-			break;
+		case 3:
+			return "ツーペア";
 		case 4:
-			return "ストレイト";
-			break;
-		case 5:
 			return "フラッシュ";
-			break;
-		case 6:
+		case 5:
 			return "フルハウス";
-			break;
-		case 7:
+		case 6:
 			return "フォーカード";
-			break;
+		case 7:
+			return "ストレイト";
 		case 8:
-			return "ストレイトフラッシュ";
-			break;
-		case 9:
 			return "ファイブカード";
-			break;
+		case 9:
+			return "ストレイトフラッシュ";
 		case 10:
 			return "ロイヤルストレートフラッシュ";
-			break;
 		}
 		return "あああ";
 	}
 
-	public void NowhandsText(int hands){
-		var ss = 0;
-		foreach(int score in players.handCardScore){
-			ss += score;
+	public void ShowPokarHandsWindow(){
+		Singleton<SoundPlayer>.instance.playSE( "click" );
+		if (GameObject.Find ("WinBG") == null) {
+			windowobj.SetActive (true);
+		} else {
+			windowobj.SetActive (false);
 		}
-		switch (hands){
-		case 0:
-			playerhandsandpoint.text = "現在\nノーペア\n強さ"+ss;
-			break;
-		case 1:
-			playerhandsandpoint.text = "現在\nワンペア\n強さ"+ss;
-			break;
-		case 2:
-			playerhandsandpoint.text = "現在\nツーペア\n強さ"+ss;
-			break;
-		case 3:
-			playerhandsandpoint.text = "現在\nスリーカード\n強さ"+ss;
-			break;
-		case 4:
-			playerhandsandpoint.text = "現在\nストレイト\n強さ"+ss;
-			break;
-		case 5:
-			playerhandsandpoint.text = "現在\nフラッシュ\n強さ"+ss;
-			break;
-		case 6:
-			playerhandsandpoint.text = "現在\nフルハウス\n強さ"+ss;
-			break;
-		case 7:
-			playerhandsandpoint.text = "現在\nフォーカード\n強さ"+ss;
-			break;
-		case 8:
-			playerhandsandpoint.text = "現在\nストレイトフラッシュ\n強さ"+ss;
-			break;
-		case 9:
-			playerhandsandpoint.text = "現在\nファイブカード\n強さ"+ss;
-			break;
-		case 10:
-			playerhandsandpoint.text = "現在\nロイヤルストレートフラッシュ\n強さ"+ss;
-			break;
-		default :
-			break;
-		}
-
-
-
 	}
 
-			
+	public void ShowChutorial(){
+		Singleton<SoundPlayer>.instance.playSE( "click" );
+		if (GameObject.Find ("chutorialBG") == null) {
+			chutoobj.SetActive (true);
+		} else {
+			chutoobj.SetActive (false);
+			PlayerPrefs.SetInt ("GameIsChutorialEnd", 1);
+		}
+
+	}
 }

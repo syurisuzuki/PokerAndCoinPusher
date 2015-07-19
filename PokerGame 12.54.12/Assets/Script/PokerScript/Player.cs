@@ -19,9 +19,19 @@ public class Player : MonoBehaviour {
 	public List<int> handCardNum = new List<int>();
 	public List<int> handCardMark = new List<int>();
 	public List<int> handCardScore = new List<int>();
+	public List<int> handcardColor = new List<int> ();
+	//public List<int> equipAccesary = new List<int> ();
+
+	public int attackPower;
+	public int hp;
+	public int defence;
+	public int chengecount;
 
 	void Awake(){
 			cards = FindObjectOfType<Card>();
+		attackPower = PlayerPrefs.GetInt ("P_Attack", 3);
+		hp = PlayerPrefs.GetInt ("P_health", 220);
+		defence = PlayerPrefs.GetInt ("P_Defence", 1);
 	}
 
 	void Start(){
@@ -37,6 +47,7 @@ public class Player : MonoBehaviour {
 		handCardNum.Clear ();
 		handCardMark.Clear ();
 		handCardScore.Clear ();
+		handcardColor.Clear ();
 	}
 
 
@@ -60,12 +71,13 @@ public class Player : MonoBehaviour {
 	/// <param name="numList">Number list.</param>
 	/// <param name="markList">Mark list.</param>
 	/// <param name="cardObj">Card object.</param>
-	public void drawCard(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList){
+	public void drawCard(List<int> numList,List<int> markList,List<GameObject> cardObj,List<int> scoreList,List<int> color){
 			for(int i = 0;i<numList.Count;i++){
 					handCardNum.Add (numList [i]);
 					handCardMark.Add (markList [i]);
 					handCardList.Add (cardObj [i]);
 			handCardScore.Add (scoreList [i]);
+			handcardColor.Add (color [i]);
 			}
 
 		//Debug.Log (handCardNum.Count);
@@ -125,7 +137,7 @@ public class Player : MonoBehaviour {
 		}
 
 		if(judgep.IsThreeCard(handCardNum) == true){
-			Debug.Log ("スリーカード");
+			//Debug.Log ("スリーカード");
 			return 1;
 			//3枚残し
 		}
@@ -133,7 +145,7 @@ public class Player : MonoBehaviour {
 		//ツーペア&ワンペア
 		if(judgep.IsPair(handCardNum)== true){
 			if(judgep.IsTwoPair(handCardNum) == true){
-				Debug.Log ("ツーペア");
+				//Debug.Log ("ツーペア");
 				return 3;
 				//1枚残し
 			}
@@ -195,9 +207,22 @@ public class Player : MonoBehaviour {
 		if(CloverCounts>11){
 			return 7;
 		}
-		//全チェンジ
-		return 9;
 
+		int white = 0;
+		int black = 0;
+		for (int c = 0; c < handcardColor.Count; c++) {
+			if (handcardColor [c] == 1) {
+				black++;
+			} else {
+				white++;
+			}
+		}
+
+		if (black > white) {
+			return 11;
+		} else {
+			return 10;
+		}
 	}
 
 }

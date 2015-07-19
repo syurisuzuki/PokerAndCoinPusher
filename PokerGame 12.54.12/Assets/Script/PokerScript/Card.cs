@@ -27,14 +27,13 @@ public class Card : MonoBehaviour {
 
 	//カードをめくる音
 	public AudioClip audioClip;
-	AudioSource audioSource;
 
 	//手札用の一時保存リスト
 	List<int> sendCardNum = new List<int> ();
 	List<int> sendCardMark = new List<int> ();
 	List<GameObject> sendCardObj = new List<GameObject> ();
 	List<int> sendCardScore = new List<int> ();
-	//List<int> sendCardSkill = new List<int> ();
+	List<int> sendCardColor = new List<int> ();
 
 	//スクリプト
 	TouchMan turn;
@@ -46,19 +45,47 @@ public class Card : MonoBehaviour {
 	public GameObject CpuParent;
 	public GameObject PlayerParent;
 
+	public UILabel p_score;
+	public UILabel p_color1;
+	public UILabel p_color2;
+	public UILabel p_color3;
+	public UILabel p_hand;
+
+	public UILabel c_score;
+	public UILabel c_color1;
+	public UILabel c_color2;
+	public UILabel c_color3;
+	public UILabel c_hand;
+
+	public UILabel winlose;
+
+	public UISprite p_skillbg;
+	public UISprite c_skillbg;
+
+	public UILabel wincoin;
+	public UILabel losecoin;
+
+	bool bairituDouble;
+
 	//CPUチェンジの処理に使う
 	int keyvalue = 0;
 	int index = 0;
 
 	void Start () {
+		bairituDouble = false;
+		int specialitemw = PlayerPrefs.GetInt ("Special", 0);
+		if (specialitemw == 7) {
+			bairituDouble = true;
+			PlayerPrefs.SetInt ("Special", 0);
+		}
 		//Listを全てコピー
 		fieldCardObj_Buck = new List<GameObject> (fieldCardObj);
 		fieldCardNum_Buck = new List<int> (fieldCardNum);
 		fieldCardMark_Buck = new List<int> (fieldCardMark);
 
+
 		//ゲットコンポーネントする
 		judge = GetComponent<Judge>();
-		audioSource = GetComponent<AudioSource> ();
 		turn = GetComponent<TouchMan>();
 	}
 
@@ -94,9 +121,6 @@ public class Card : MonoBehaviour {
 		/// <param name="drawnum">Drawnum.</param>
 	IEnumerator DrawCards(int drawnum){
 
-		//ステートをチェンジ
-		turn.Chenge_Draw_Turn ();
-
 		playerd = FindObjectOfType<Player>();
 
 		float xVec = cardInstantiateVector.x;
@@ -107,6 +131,7 @@ public class Card : MonoBehaviour {
 		sendCardNum.Clear ();
 		sendCardMark.Clear ();
 		sendCardObj.Clear ();
+		sendCardColor.Clear ();
 
 		for (int h = 0; h < drawnum; h++) {
 			//ランダムに取り出す
@@ -118,23 +143,17 @@ public class Card : MonoBehaviour {
 			card.tag = "PlayerCard";
 			card.transform.parent = PlayerParent.transform;
 
-			//キラカードの選定
-			int score = 0;
-			int kira = Random.Range (0, 10);
-			if(kira < 3){
-				card.GetComponent<CardInfo> ().isKira = true;
-				score += 5;
-			}else{
-				card.GetComponent<CardInfo>().StopParticleSystem();
-			}
+			//黒１
+			int color = card.GetComponent<CardInfo> ().black;
 
+			int score = 0;
 
 			Animator panim = card.GetComponent<Animator> ();
 			panim.SetBool ("CardAnim", true);
 			sendCardObj.Add (card);
 
 			//効果音の再生
-			audioSource.PlayOneShot (audioClip);
+			Singleton<SoundPlayer>.instance.playSE( "draw" );
 
 			//カード情報の取得
 			int mark = card.GetComponent<CardInfo> ().Mark;
@@ -150,7 +169,7 @@ public class Card : MonoBehaviour {
 			//カードのリストに加える
 			sendCardMark.Add (mark);
 			sendCardNum.Add (cardn);
-
+			sendCardColor.Add (color);
 			sendCardScore.Add (score);
 
 			//場のカードから引いたカードを削除
@@ -158,21 +177,18 @@ public class Card : MonoBehaviour {
 			fieldCardNum.RemoveAt (cardnum);
 			fieldCardMark.RemoveAt (cardnum);
 
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(0.4f);
 		}
 			
 		//リストを渡す
-		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj,sendCardScore);
-
-		//ドロー時の約判定
-		int firsthands = judge.PokarHandsInt (sendCardNum, sendCardMark);
-		turn.NowhandsText (firsthands);
+		playerd.drawCard (sendCardNum, sendCardMark, sendCardObj,sendCardScore,sendCardColor);
 
 		//一時保存用のリストを初期化
 		sendCardNum.Clear ();
 		sendCardMark.Clear ();
 		sendCardObj.Clear ();
 		sendCardScore.Clear();
+		sendCardColor.Clear ();
 
 		enemyd = FindObjectOfType<Enemy>();
 
@@ -182,24 +198,19 @@ public class Card : MonoBehaviour {
 			int cardnum = Random.Range (0, fieldCardNum.Count);
 
 			//カードの生成
-			GameObject card = (GameObject)Instantiate (fieldCardObj [cardnum], new Vector3(xVec + h,yVec + 3.2f,zVec), Quaternion.identity);
+			GameObject card = (GameObject)Instantiate (fieldCardObj [cardnum], new Vector3(xVec + h,yVec + 4.8f,zVec), Quaternion.identity);
 			card.name = "Card:" + h;
 			card.transform.parent = CpuParent.transform;
 			card.tag = "CpuCard";
 			sendCardObj.Add (card);
 
+			int color = card.GetComponent<CardInfo> ().black;
+
 			//キラカードの選定
 			int score = 0;
-			int kira = Random.Range (0, 10);
-			if(kira == 2){
-				card.GetComponent<CardInfo> ().isKira = true;
-				score += 5;
-			}else{
-				card.GetComponent<CardInfo>().StopParticleSystem();
-			}
 
 			//効果音の再生
-			audioSource.PlayOneShot (audioClip);
+			Singleton<SoundPlayer>.instance.playSE( "draw" );
 
 			//カード情報の取得
 			int mark = card.GetComponent<CardInfo> ().Mark;
@@ -210,10 +221,11 @@ public class Card : MonoBehaviour {
 			}else{
 				score += cardn;
 			}
-				
+
 			//カードのリストに加える
 			sendCardMark.Add (mark);
 			sendCardNum.Add (cardn);
+			sendCardColor.Add (color);
 			sendCardScore.Add(score);
 
 			//場のカードから引いたカードを削除
@@ -221,11 +233,12 @@ public class Card : MonoBehaviour {
 			fieldCardNum.RemoveAt (cardnum);
 			fieldCardMark.RemoveAt (cardnum);
 
-			yield return new WaitForSeconds(0.3f);
+			yield return new WaitForSeconds(0.2f);
 		}
 
 		//リストを渡す
-		enemyd.drawCardEnemy (sendCardNum, sendCardMark, sendCardObj,sendCardScore);
+		enemyd.drawCardEnemy (sendCardNum, sendCardMark, sendCardObj,sendCardScore,sendCardColor);
+
 
 		//ステートをチェンジ
 		turn.Chenge_player_Turn ();
@@ -261,8 +274,6 @@ public class Card : MonoBehaviour {
 				Vector3 cardVector = playerd.handCardList [i - looping].transform.position;
 				bool IsTouched = playerd.handCardList [i - looping].GetComponent<CardInfo> ().touched;
 
-				//Destroy (playerd.handCardList [i]);
-
 				if(IsTouched==false){
 
 					if(cardVector.x==-2.0){
@@ -292,17 +303,10 @@ public class Card : MonoBehaviour {
 
 					//キラカードの選定
 					int score = 0;
-					int kira = Random.Range (0, 15);
-					if(kira < 6){
-						card.GetComponent<CardInfo> ().isKira = true;
-						score += 5;
-					}else{
-						card.GetComponent<CardInfo>().StopParticleSystem();
-					}
 
 					Animator panim = card.GetComponent<Animator> ();
 					panim.SetBool ("CardAnim", true);
-					audioSource.PlayOneShot (audioClip);
+					Singleton<SoundPlayer>.instance.playSE( "draw" );
 					int mark = card.GetComponent<CardInfo> ().Mark;
 					int cardn = card.GetComponent<CardInfo> ().Number;
 
@@ -312,24 +316,26 @@ public class Card : MonoBehaviour {
 						score += cardn;
 					}
 
+					int colorcc = card.GetComponent<CardInfo> ().black;
 
 					playerd.handCardMark.RemoveAt(listn - looping);
 					playerd.handCardNum.RemoveAt(listn - looping);
 					playerd.handCardScore.RemoveAt(listn - looping);
+					playerd.handcardColor.RemoveAt(listn - looping);
 
 					playerd.addListp (card);
 
 					playerd.handCardMark.Add (mark);
 					playerd.handCardNum.Add (cardn);
 					playerd.handCardScore.Add (score);
+					playerd.handcardColor.Add(colorcc);
 
 					fieldCardObj.RemoveAt (cardnum);
 					looping++;
-					yield return new WaitForSeconds(0.5f);
+
 				}
-
 			}
-
+			yield return new WaitForSeconds(0.5f);
 			//ここから敵のチェンジの処理
 
 			//変数の初期化
@@ -483,7 +489,6 @@ public class Card : MonoBehaviour {
 				ChengeAndOpenCPUcards ();
 				break;
 			}
-
 		}
 		yield break;
 	}
@@ -496,7 +501,6 @@ public class Card : MonoBehaviour {
 		int counts = enemyd.EnemyCardObject.Count;
 		int loopings = 0;
 		int listindex = 0;
-
 		for(int i = 0;i<counts;i++){
 			Vector3 cardVector = enemyd.EnemyCardObject [i - loopings].transform.position;
 			bool IsTouched = enemyd.EnemyCardObject [i - loopings].GetComponent<CardInfo> ().touched;
@@ -526,15 +530,10 @@ public class Card : MonoBehaviour {
 				card.tag = "CpuCard";
 				card.transform.parent = CpuParent.transform;
 
+				int c = card.GetComponent<CardInfo> ().black;
+
 				//キラカードの選定
 				int score = 0;
-				int kira = Random.Range (0, 10);
-				if(kira == 7){
-					card.GetComponent<CardInfo> ().isKira = true;
-					score += 5;
-				}else{
-					card.GetComponent<CardInfo>().StopParticleSystem();
-				}
 
 				Animator panim = card.GetComponent<Animator> ();
 				panim.SetBool ("CardAnim", true);
@@ -549,25 +548,23 @@ public class Card : MonoBehaviour {
 				enemyd.EnemyCardNum.RemoveAt (listindex - loopings);
 				enemyd.EnemyCardMark.RemoveAt (listindex - loopings);
 				enemyd.EnemyCardScore.RemoveAt (listindex - loopings);
+				enemyd.EnemyCardColor.RemoveAt (listindex - loopings);
 				//enemyd.EnemyCardObject[i] = card;
 
 				enemyd.EnemyCardMark.Add (mark);
 				enemyd.EnemyCardNum.Add (cardn);
 				enemyd.EnemyCardScore.Add (score);
-
-
+				enemyd.EnemyCardColor.Add (c);
 				enemyd.addListc (card);
-
 				fieldCardObj.RemoveAt (cardnum);
 				loopings++;
+				Singleton<SoundPlayer>.instance.playSE( "draw" );
 			} else {
 				Animator panim = enemyd.EnemyCardObject[i-loopings].GetComponent<Animator> ();
 				panim.SetBool ("CpuCardTouch", true);
 				panim.SetBool ("CardAnim", true);
 			}
-
 		}
-		turn.Chenge_Judge_Turn ();
 		JudgePokarHand ();
 
 	}
@@ -578,23 +575,70 @@ public class Card : MonoBehaviour {
 	public void JudgePokarHand(){
 		int playerStrong = judge.PokarHandsInt (playerd.handCardNum, playerd.handCardMark);
 		int cpuStrong = judge.PokarHandsInt (enemyd.EnemyCardNum, enemyd.EnemyCardMark);
+		int pcolor = judge.IsColorHand (playerd.handcardColor);
+		int ccolor = judge.IsColorHand (enemyd.EnemyCardColor);
 
-		Debug.Log (playerStrong);
-		Debug.Log (cpuStrong);
+		string phand = turn.handintforstring (playerStrong);
+		p_hand.text = phand;
 
-		if(playerStrong>cpuStrong){
-			int handscore = judge.PokarHandsScore (playerStrong);
-			turn.WinLose ("PLAYER",playerStrong,cpuStrong,handscore);
-		}
-		if(playerStrong==cpuStrong){
-			int handscore = judge.PokarHandsScore (playerStrong);
-			turn.WinLose ("DRAW",playerStrong,cpuStrong,handscore);
-		}
-		if(playerStrong<cpuStrong){
-			int handscore = judge.PokarHandsScore (cpuStrong);
-			turn.WinLose ("ENEMY",playerStrong,cpuStrong,handscore);
+		string chand = turn.handintforstring (cpuStrong);
+		c_hand.text = chand;
+
+		p_skillbg.gameObject.SetActive (true);
+		c_skillbg.gameObject.SetActive (true);
+
+		int p_handcardscore = 0;
+		for (int p = 0; p < playerd.handCardScore.Count; p++) {
+			p_handcardscore += playerd.handCardScore [p];
 		}
 
+		int c_handcardscore = 0;
+		for (int p = 0; p < enemyd.EnemyCardScore.Count; p++) {
+			c_handcardscore += enemyd.EnemyCardScore [p];
+		}
+
+		int p_power = judge.PokarHandsScore (playerStrong);
+		if (bairituDouble == true) {
+			p_power *= 2;
+		}
+		int c_power = judge.PokarHandsScore (cpuStrong);
+
+		if (pcolor < 4) {
+			p_score.text = "回復行動"+p_power+"倍の威力!";
+		} else {
+			p_score.text = "攻撃行動"+p_power+"倍の威力!";
+		}
+
+		if (ccolor < 4) {
+			c_score.text = "回復行動"+c_power+"倍の威力!";
+		} else {
+			c_score.text = "攻撃行動"+c_power+"倍の威力!";
+		}
+
+		float f = (turn.pat * p_power) * turn.myyosou;
+		float l = (turn.cat * c_power) * turn.myyosou;
+		int d = (int)Mathf.Round (f);
+		int e = (int)Mathf.Round (l);
+		if (pcolor < 4) {
+			d *= -1;
+		} else {
+			d -= turn.cde;
+			if (d < 0) {
+				d = 0;
+			}
+		}
+
+		if (ccolor < 4) {
+			e *= -1;
+		} else {
+			e -= turn.pde;
+			if (e < 0) {
+				e = 0;
+			}
+		}
+			
+		int s = Random.Range (0, 2);
+		turn.WinLose (d,e,s);
 	}
 
 	public void PlayerAllselect(){
@@ -608,33 +652,24 @@ public class Card : MonoBehaviour {
 
 	public void AutoSelectPlayerCard(){
 		//変数の初期化
-		int listnd = 0;
-		int loopingss= 0;
+		//int listnd = 0;
+		//int loopingss= 0;
 		playerd = FindObjectOfType<Player>();
-
-		int count = playerd.handCardNum.Count;
-
-		Debug.Log (playerd.ThinkAIP ());
-
 		//タッチさせるためにスイッチで処理を分ける
 		switch(playerd.ThinkAIP()){
 
 		case 0:
 			//チェンジしない
 			foreach (GameObject obj in playerd.handCardList) {
-
 				if (obj.GetComponent<CardInfo> ().touched == false) {
 					obj.SendMessage ("TouchCard");
 				}
-
-
 			}
 			break;
 		case 1:
 			//スリーカード残し
 			keyvalue = 0;
 			index = 0;
-
 			foreach(int i in playerd.handCardNum){
 				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
 				if (cardList.Count == 3) {
@@ -646,29 +681,23 @@ public class Card : MonoBehaviour {
 				if (i == keyvalue || i == 0) {
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
-
 					}
-
 				} else {
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
-
 					}
 				}
 				index++;
-
 			}
 			break;
 		case 2:
 			//ワンペア残し
 			keyvalue = 0;
 			index = 0;
-
 			foreach(int i in playerd.handCardNum){
 				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
 				if (cardList.Count == 2) {
 					keyvalue = i;
-					Debug.Log (keyvalue);
 				}
 			}
 
@@ -690,7 +719,6 @@ public class Card : MonoBehaviour {
 			keyvalue = 0;
 			index = 0;
 			int keyvaluetwo = 0;
-
 			foreach(int i in playerd.handCardNum){
 				List<int> cardList = playerd.handCardNum.Select (c => c).Where (s => s == i || s == 0).ToList ();
 				if (cardList.Count == 2) {
@@ -714,7 +742,6 @@ public class Card : MonoBehaviour {
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
 					}
-
 				}
 				index++;
 			}
@@ -722,12 +749,10 @@ public class Card : MonoBehaviour {
 		case 4:
 			//スペードのフラッシュ狙い3
 			index = 0;
-
 			foreach(int i in playerd.handCardMark){
 				if(i == 3 || i == 0){
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
-
 					}
 				} else {
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
@@ -741,7 +766,6 @@ public class Card : MonoBehaviour {
 		case 5:
 			//ハートのフラッシュ狙い4
 			index = 0;
-
 			foreach(int i in playerd.handCardMark){
 				if(i == 4 || i == 0){
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
@@ -758,27 +782,8 @@ public class Card : MonoBehaviour {
 		case 6:
 			//ダイアのフラッシュ狙い2
 			index = 0;
-
 			foreach(int i in playerd.handCardMark){
 				if(i == 2 || i == 0){
-					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
-						playerd.handCardList [index].SendMessage ("TouchCard");
-						index++;
-					}
-				} else {
-					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
-						playerd.handCardList [index].SendMessage ("TouchCard");
-						index++;
-					}
-				}
-			}
-			break;
-		case 7:
-			//クローバーのフラッシュ狙い1
-			index = 0;
-
-			foreach(int i in playerd.handCardMark){
-				if(i == 1 || i == 0){
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
 
@@ -792,6 +797,23 @@ public class Card : MonoBehaviour {
 				index++;
 			}
 			break;
+		case 7:
+			//クローバーのフラッシュ狙い1
+			index = 0;
+			foreach(int i in playerd.handCardMark){
+				if(i == 1 || i == 0){
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+
+					}
+				} else {
+					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
+						playerd.handCardList [index].SendMessage ("TouchCard");
+					}
+				}
+				index++;
+			}
+			break;
 		case 8:
 			//ジョーカー残し
 			index = 0;
@@ -800,7 +822,6 @@ public class Card : MonoBehaviour {
 				if(i == 0){
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == false) {
 						playerd.handCardList [index].SendMessage ("TouchCard");
-
 					}
 				} else {
 					if (playerd.handCardList [index].GetComponent<CardInfo> ().touched == true) {
@@ -826,9 +847,52 @@ public class Card : MonoBehaviour {
 				}
 			}
 			break;
+		case 10:
+			//ホワイト残し
+			//Debug.Log ("10");
+			foreach (GameObject obj in playerd.handCardList) {
+				if (obj.GetComponent<CardInfo> ().black == 0) {
+					if (obj.GetComponent<CardInfo> ().touched == false) {
+						obj.SendMessage ("TouchCard");
+					}
+
+				} else {
+					if (obj.GetComponent<CardInfo> ().touched == true) {
+						obj.SendMessage ("TouchCard");
+					}
+				}
+			}
+			break;
+		case 11:
+			//ブラック残し
+			//Debug.Log ("11");
+			foreach (GameObject obj in playerd.handCardList) {
+				if (obj.GetComponent<CardInfo> ().black == 1) {
+					if (obj.GetComponent<CardInfo> ().touched == false) {
+						obj.SendMessage ("TouchCard");
+					}
+
+				} else {
+					if (obj.GetComponent<CardInfo> ().touched == true) {
+						obj.SendMessage ("TouchCard");
+					}
+				}
+			}
+			break;
 		}
 	}
 
+	public void DeleteSkillWindow(){
+		p_skillbg.gameObject.SetActive (false);
+		c_skillbg.gameObject.SetActive (false);
+		winlose.text = "";
+		//p_color3.text = "";
+		//c_color3.text = "";
+		//p_color2.text = "";
+		//c_color2.text = "";
+		wincoin.text = "";
+		losecoin.text = "";
+	}
 
 
 }

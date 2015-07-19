@@ -6,7 +6,78 @@ using System.Collections;
 /// </summary>
 public class EliceComent : MonoBehaviour {
 
+	[SerializeField, MultilineAttribute (5)]
 	public string coment;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1hello;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2hello;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3hello;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1cardsend;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2cardsend;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3cardsend;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1heal;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2heal;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3heal;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1Attack;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2Attack;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3Attack;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1call;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2call;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3call;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1raise;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2raise;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3raise;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1drop;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2drop;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3drop;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1gift1;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2gift1;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3gift1;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1gift2;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2gift2;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3gift2;
+
+	[SerializeField, MultilineAttribute (2)]
+	public string l1gift3;
+	[SerializeField, MultilineAttribute (2)]
+	public string l2gift3;
+	[SerializeField, MultilineAttribute (2)]
+	public string l3gift3;
 
 	//Judge judge;
 
@@ -16,10 +87,10 @@ public class EliceComent : MonoBehaviour {
 	void Start(){
 		//judge = GetComponent<Judge>();
 		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-		MainSpriteRenderer.sprite = Faces[12];
+		//MainSpriteRenderer.sprite = Faces[12];
 	}
 
-	public string pokarfacecoment(int lp ,int phand){
+	/*public string pokarfacecoment(int lp ,int phand){
 		if (lp < 25) {
 			if(phand<3){
 				coment = "これはダメね";
@@ -281,7 +352,7 @@ public class EliceComent : MonoBehaviour {
 			FaceChenge(4);
 		}
 		return coment;
-	}
+	}*/
 
 	public void FaceChenge(int index){
 		MainSpriteRenderer.sprite = Faces[index];

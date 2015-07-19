@@ -49,15 +49,21 @@ public class Judge : MonoBehaviour {
 	public void CreateStraightList(List<int> NumList){
 			DamyList = new List<int> (NumList);
 			DamyList.Sort ();
-			if(DamyList[0] == 1 && DamyList[DamyList.Count - 1] == 13){
+		//Debug.Log ("-------------------");
+		for (int y = 0; y < DamyList.Count; y++) {
+			//Debug.Log (DamyList[y]);
+		}
+		//Debug.Log ("-------------------");
+
+			if(DamyList[0] == 1){
 					DamyList.RemoveAt(0);
 					DamyList.Add (14);
 			}
-			if(DamyList[1] == 1 && DamyList[DamyList.Count - 1] == 13){
+			if(DamyList[1] == 1){
 					DamyList.RemoveAt(1);
 					DamyList.Add (14);
 			}
-			if(DamyList[2] == 1 && DamyList[DamyList.Count - 1] == 13){
+			if(DamyList[2] == 1){
 					DamyList.RemoveAt(2);
 					DamyList.Add (14);
 			}
@@ -85,19 +91,28 @@ public class Judge : MonoBehaviour {
 
 		int StartIndex = CountsJoker(DamyList);
 		int nowNumber = DamyList [StartIndex];
-
 		for (int i = StartIndex; i < DamyList.Count - 1; i++) {
 			if (nowNumber + 1 == DamyList [i + 1]) {
 				nowNumber++;
 				continue;
-			}else{
-				if (StartIndex > 0) {
-					nowNumber++;
-					StartIndex--;
-					continue;
-				}else{
+			} else {
+				if (nowNumber == DamyList [i + 1]) {
 					return false;
 				}
+
+				if (Mathf.Abs (nowNumber - DamyList [i + 1]) > 2) {
+					return false;
+				}
+
+				if (StartIndex > 0) {
+					nowNumber = DamyList [i + 1];
+					StartIndex--;
+					continue;
+				} else {
+					return false;
+				}
+
+
 			}
 		}
 		return true;
@@ -169,7 +184,7 @@ public class Judge : MonoBehaviour {
 			CopyCardList (NumList);
 
 			foreach(int i in CNumList){
-					List<int> cardList = CNumList.Select (c => c).Where (s => s == i && s != PairNum).ToList ();
+			List<int> cardList = CNumList.Select (c => c).Where (s => s == i && s != PairNum && s != 0).ToList ();
 					//Debug.Log ("count:" + cardList.Count);
 					if (cardList.Count == 2) {
 							//PairNum = i;
@@ -263,51 +278,54 @@ public class Judge : MonoBehaviour {
 		return false;
 	}
 
+
+
 	public int PokarHandsInt(List<int> NumList,List<int> MarkList){
 
 		if(IsRoyalStraightFlush(NumList,MarkList)==true){
 			return 10;
 		}
 
-		if(IsFiveCard(NumList) == true){
-			return 9;
-		}
-
 		if(IsStraight(NumList) == true){
 			if(IsFlush(MarkList) == true){
-				return 8;
+				return 9;
 			}
+		}
+
+		if(IsFiveCard(NumList) == true){
+			return 8;
 		}
 
 		if(IsFourCard(NumList) == true){
-			return 7;
-		}
-
-		if(IsThreeCard(NumList) == true){
-			if(IsFullHouse(NumList)==true){
-				return 6;
-			}
-		}
-
-		if(IsFlush(MarkList) == true){
-			return 5;
+			return 6;
 		}
 
 		if(IsStraight(NumList) == true){
+			return 7;
+		}
+			
+
+
+		if(IsThreeCard(NumList) == true){
+			if(IsFullHouse(NumList)==true){
+				return 5;
+			}
+			if(IsFlush(MarkList) == true){
+				return 4;
+			}
+			return 2;
+		}else if(IsFlush(MarkList) == true){
 			return 4;
 		}
 
-		if(IsThreeCard(NumList) == true){
-			return 3;
-		}
 
+			
 		if(IsPair(NumList) == true){
 			if(IsTwoPair(NumList) == true){
-				return 2;
+				return 3;
 			}
 			return 1;
 		}
-
 		return 0;
 
 	}
@@ -319,39 +337,145 @@ public class Judge : MonoBehaviour {
 			return 1;
 		case 1:
 			//ワンペア
-			return 5;
+			return 2;
 		case 2:
 			//ツーペア
-			return 9;
+			return 3;
 		case 3:
 			//スリーカード
-			return 14;
+			return 4;
 		case 4:
 			//ストレイト
-			return 19;
+			return 5;
 		case 5:
 			//フラッシュ
-			return 23;
+			return 7;
 		case 6:
 			//フルハウス
-			return 30;
+			return 10;
 		case 7:
 			//フォーカード
-			return 37;
+			return 15;
 		case 8:
 			//ストレイトフラッシュ
-			return 45;
+			return 20;
 		case 9:
 			//ファイブカード
-			return 50;
+			return 25;
 		case 10:
 			//ロイヤルストレートフラッシュ
-			return 70;
+			return 100;
 		default:
 			return 0;
 		}
 	}
 
+	public int ColorListCountToScore(int count){
+		return 0;
+	}
+
+	public int IsColorHand(List<int> colors){
+
+		int color = 0;
+
+		if (IsWhite3Hand(colors) == true) {
+			color = 1;
+			if(IsWhite4Hand(colors) == true){
+				color = 2;
+				if(IsWhiteHand(colors) == true){
+					color = 3;
+				}
+			}
+		}
+
+		if(IsBlack3Hand(colors) == true){
+			color = 4;
+			if(IsBlack4Hand(colors) == true){
+				color = 5;
+				if(IsBlackHand(colors) == true){
+					color = 6;
+				}
+			}
+		}
+
+		return color;
+	}
+
+	public bool IsBlackHand(List<int>num){
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 0) {
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	public bool IsWhiteHand(List<int>num){
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public bool IsBlack4Hand(List<int>num){
+		int blackcount = 0;
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 1) {
+				blackcount++;
+			}
+		}
+		if (blackcount >= 4) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public bool IsWhite4Hand(List<int>num){
+		int whitecount = 0;
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 0) {
+				whitecount++;
+			}
+		}
+		if (whitecount >= 4) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public bool IsBlack3Hand(List<int>num){
+		int blackcount = 0;
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 1) {
+				blackcount++;
+			}
+		}
+		if (blackcount >= 3) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public bool IsWhite3Hand(List<int>num){
+		int whitecount = 0;
+		for (int i = 0; i < num.Count; i++) {
+			if (num [i] == 0) {
+				whitecount++;
+			}
+		}
+		if (whitecount >= 3) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
 
 
 }
