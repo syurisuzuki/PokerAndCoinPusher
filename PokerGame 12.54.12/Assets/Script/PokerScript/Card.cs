@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -38,8 +39,8 @@ public class Card : MonoBehaviour {
 	//スクリプト
 	TouchMan turn;
 	Player playerd;
-	Enemy enemyd;
-	Judge judge;
+	//Enemy enemyd;
+	//Judge judge;
 
 	//カードの親
 	public GameObject CpuParent;
@@ -85,7 +86,7 @@ public class Card : MonoBehaviour {
 
 
 		//ゲットコンポーネントする
-		judge = GetComponent<Judge>();
+		//judge = GetComponent<Judge>();
 		turn = GetComponent<TouchMan>();
 	}
 
@@ -573,10 +574,10 @@ public class Card : MonoBehaviour {
 	/// プレイヤーの役とCPUの役のジャッジを行う.
 	/// </summary>
 	public void JudgePokarHand(){
-		int playerStrong = judge.PokarHandsInt (playerd.handCardNum, playerd.handCardMark);
-		int cpuStrong = judge.PokarHandsInt (enemyd.EnemyCardNum, enemyd.EnemyCardMark);
-		int pcolor = judge.IsColorHand (playerd.handcardColor);
-		int ccolor = judge.IsColorHand (enemyd.EnemyCardColor);
+        int playerStrong = 1;//judge.PokarHandsInt (playerd.handCardNum, playerd.handCardMark);
+        int cpuStrong = 1;//judge.PokarHandsInt (enemyd.EnemyCardNum, enemyd.EnemyCardMark);
+        int pcolor = 1;// judge.IsColorHand (playerd.handcardColor);
+        int ccolor = 1;// judge.IsColorHand (enemyd.EnemyCardColor);
 
 		string phand = turn.handintforstring (playerStrong);
 		p_hand.text = phand;
@@ -597,11 +598,11 @@ public class Card : MonoBehaviour {
 			c_handcardscore += enemyd.EnemyCardScore [p];
 		}
 
-		int p_power = judge.PokarHandsScore (playerStrong);
+        int p_power = 1; //judge.PokarHandsScore (playerStrong);
 		if (bairituDouble == true) {
 			p_power *= 2;
 		}
-		int c_power = judge.PokarHandsScore (cpuStrong);
+        int c_power = 1;// judge.PokarHandsScore (cpuStrong);
 
 		if (pcolor < 4) {
 			p_score.text = "回復行動"+p_power+"倍の威力!";
@@ -896,3 +897,4 @@ public class Card : MonoBehaviour {
 
 
 }
+*/

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -15,32 +16,24 @@ public class Judge : MonoBehaviour {
 	//役の強さ
 	public int handStrong;
 
-	//リストの選定
-	private List<int> CNumList;
-	private List<int> CMarkList;
-	//ストレイト用に値を調整したリスト
-	private List<int> DamyList;
+    //リストの選定
+    public List<CardBase> handcards = new List<CardBase>();
 
+	private List<CardBase> _tmpList;
+	
 	private int PairNum;
 
-	/// <summary>
-	/// 所持カードリストのコピー.
-	/// </summary>
-	/// <param name="Numlist">Numlist.</param>
-	public void CopyCardList(List<int> Numlist){
-			CNumList = new List<int> (Numlist);
-			CNumList.Sort ();
-	}
+	public List<CardBase> InitHandsCardList(List<CardBase> handslist){
+        _tmpList.Clear();
+        foreach (CardBase cb in handslist)
+        {
+            _tmpList.Add(cb);
+        }
+        _tmpList.Sort();
 
-	/// <summary>
-	/// 所持マークリストのコピー.
-	/// </summary>
-	/// <returns>The mark list.</returns>
-	/// <param name="MarkList">Mark list.</param>
-	public void CopyMarkList(List<int> MarkList){
-			CMarkList = new List<int> (MarkList);
-			CMarkList.Sort ();
+        return _tmpList;
 	}
+    
 
 	/// <summary>
 	/// ストレイト用に数字を変換したリストを作る.
@@ -480,3 +473,4 @@ public class Judge : MonoBehaviour {
 
 }
 
+*/

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -10,7 +11,7 @@ using System.Linq;
 public class Player : MonoBehaviour {
 
 	public Card cards;
-	public Judge judgep;
+	//public Judge judgep;
 	//ゲームの親か
 	public bool IsParent = true;
 
@@ -226,3 +227,4 @@ public class Player : MonoBehaviour {
 	}
 
 }
+*/

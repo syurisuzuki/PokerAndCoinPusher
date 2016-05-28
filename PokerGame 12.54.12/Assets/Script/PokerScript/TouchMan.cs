@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ public class TouchMan : MonoBehaviour {
 	public GameObject[] Enemys;
 
 	//カードのスクリプト
-	Card card;
-	Enemy enemy;
+	//Card card;
+	//Enemy enemy;
 	EliceComent elice;
 
 	//UI用のテキストの宣言
@@ -675,3 +676,4 @@ public class TouchMan : MonoBehaviour {
 
 	}
 }
+*/

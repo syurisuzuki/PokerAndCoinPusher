@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{D832928B-C77A-321D-2FF3-5FC7B3F815C9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_3;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmActivity.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmActivityRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmActivityResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmAddress.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmApi.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmBatchApi.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmDateTimeConverter.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmIgnorelistItem.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmIgnorelistRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmIgnorelistResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmInspectionRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmInspectionResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmJsonPropertyAttribute.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmMakeRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmMakeResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmMessage.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmMessageRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmMessageResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPayment.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPaymentItem.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPaymentRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPaymentResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPeopleRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPeopleResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmPerson.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmRequestApi.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmThumbnail.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmThumbnailRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmThumbnailResponse.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmUrl.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\DmmUserText.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Api\IDmmRequest.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\Dmm.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\MenuScript.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\MenuSlider.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\RecommendedGamesScript.cs" />
+     <Compile Include="Assets\Plugins\DMM\Script\TouchScript.cs" />
+     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
+     <None Include="Assets\NGUI\ReadMe - 3.6.2.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Masked 1.shader" />
+     <None Include="Assets\Spine\spine-unity\Shaders\HiddenPass.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_1.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\ui_widget.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Masked 2.shader" />
+     <None Include="Assets\spine01\skeleton.atlas.txt" />
+     <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_topnav_header.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\strings_sandbox.xml" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\color_common.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\unity_player_widget.xml" />
+     <None Include="Assets\Utage\LocalizeText\SystemText.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\passcode_setting.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_5.xml" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\Boss\skeleton.atlas.txt" />
+     <None Include="Assets\Egtd\Resource\UI\Font\number02-export.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 1.shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (TextureClip).shader" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (TextureClip).shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_title_view.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 2.shader" />
+     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Masked Colored.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_loginnav_logout.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 3.shader" />
+     <None Include="Assets\Animation\texture\GachaBG.shader" />
+     <None Include="Assets\Egtd\Font\questResult\q_result.fnt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\activity_main_menu.xml" />
+     <None Include="Assets\Plugins\DMM\image\sprites.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\attrs.xml" />
+     <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_cancel.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\sandbox_btn_login.xml" />
+     <None Include="Assets\Load\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\common_title_bar.xml" />
+     <None Include="Assets\Egtd\Prefabs\Quest\NewQuestPref\LevelUp\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_2.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\themes.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (TextureClip).shader" />
+     <None Include="Assets\commonBGSpine\skeleton.atlas.txt" />
+     <None Include="Assets\Egtd\Shader\SpritesWhiteFix.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_service_blue.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_topnav_blue.xml" />
+     <None Include="Assets\arrSpine\skeleton.atlas.txt" />
+     <None Include="Assets\spine01\skeleton.json.txt" />
+     <None Include="Assets\Egtd\Resource\UI\Font\number01-export.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\chk_bg_mylibrary.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\sandbox_chk_bg_mylibrary.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\unity_player.xml" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\Test\effect03\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_4.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_delete.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\anim\activity_open_exit.xml" />
+     <None Include="Assets\DMM_XML\egtdtest\normal\dmm_asdk_configuration.xml" />
+     <None Include="Assets\Egtd\Resource\UI\Font\number04-export.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Masked 3.shader" />
+     <None Include="Assets\Quest_Spine\Dairy_Quest\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\fragment_header.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\anim\activity_close_enter.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 1.shader" />
+     <None Include="Assets\Egtd\Resource\UI\Font\number05-export.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\parts_header.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_7.xml" />
+     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+     <None Include="Assets\DMM_XML\SandBox\normal\dmm_asdk_configuration.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\AndroidManifest.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\dialog_update.xml" />
+     <None Include="Assets\Egtd\Resource\UI\Font\damage1.fnt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\activity_web_view.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
+     <None Include="Assets\Egtd\Prefabs\Deck\bg\skeleton.json.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bt_loginnav_one.xml" />
+     <None Include="Assets\arrSpine\skeleton.json.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_login.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_6.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 2.shader" />
+     <None Include="Assets\Utage\LocalizeText\ExampleText.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\passcode_view.xml" />
+     <None Include="Assets\Egtd\Prefabs\Quest\NewQuestPref\compclear\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_pickup.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 1.shader" />
+     <None Include="Assets\Spine\spine-unity\Shaders\Bones.shader" />
+     <None Include="Assets\AvoEx\AesEncryptor\readme.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\anim\activity_close_exit.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_header.xml" />
+     <None Include="Assets\NGUI\ReadMe - 3.9.0.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+     <None Include="Assets\arrSpine\evol\skeleton.atlas.txt" />
+     <None Include="Assets\Spine\spine-unity\Ghost\Shaders\SkeletonGhost.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable-mdpi\main_menu_border.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\web_view.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\styles.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+     <None Include="Assets\UniRx\ReadMe.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\passcode.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_global_navi.xml" />
+     <None Include="Assets\Egtd\Prefabs\Quest\NewQuestPref\missionClear\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable-mdpi\common_border.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_loginnav_head.xml" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\Win\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\activity_sandbox_login.xml" />
+     <None Include="Assets\Utage\Scripts\GameLib\iTween\Plugins\ReadMe!\ReadMe!.txt" />
+     <None Include="Assets\DMM_XML\SandBox\R18\dmm_asdk_configuration.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\color\bt_topnav_service_txt_white.xml" />
+     <None Include="Assets\Utage\ReadMe.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_8.xml" />
+     <None Include="Assets\DMM_XML\Release\normal\dmm_asdk_configuration.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\dimens_common.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_maintenance.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_3.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\activity_login.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\styles_common.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\drawer_list_item.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\anim\activity_open_enter.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_9.xml" />
+     <None Include="Assets\Egtd\Font\fav\fon23.fnt" />
+     <None Include="Assets\Spine\spine-unity\Shaders\Skeleton.shader" />
+     <None Include="Assets\Egtd\Resource\UI\Font\number03-export.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\activity_logo.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\layout\bg_top_navigation.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_login_navi.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\bg_list_base.xml" />
+     <None Include="Assets\Egtd\Prefabs\Deck\bchara\skeleton.atlas.txt" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\Title\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+     <None Include="Assets\DMM_XML\Release\R18\dmm_asdk_configuration.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_service_pc.xml" />
+     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Additive Colored.shader" />
+     <None Include="Assets\Utage\LocalizeText\ErrorMsg.txt" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\Lose\skeleton.atlas.txt" />
+     <None Include="Assets\Egtd\Resource\UI\Battle\BattleStart\skeleton.atlas.txt" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Masked.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_exchange.xml" />
+     <None Include="Assets\Egtd\Font\font22\fon22.fnt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\attrs_common.xml" />
+     <None Include="Assets\Utage\LocalizeText\AdvErrorMsg.txt" />
+     <None Include="Assets\Egtd\Font\UnitInfo\unitinfo_s.fnt" />
+     <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+     <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\strings_common.xml" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_service_pc_blue.xml" />
+     <None Include="Assets\Egtd\Prefabs\Deck\bg\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_search.xml" />
+     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text (TextureClip).shader" />
+     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth.shader" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\values\strings.xml" />
+     <None Include="Assets\Egtd\Prefabs\LoginBonus\stamp\skeleton.atlas.txt" />
+     <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\color\bt_topnav_btn_txt.xml" />
+     <None Include="Assets\Quest_Spine\permanent_Quest\skeleton.atlas.txt" />
+     <None Include="Assets\DMM_XML\egtdtest\R18\dmm_asdk_configuration.xml" />
+     <None Include="Assets\Egtd\Font\gift_font\gift.fnt" />
+     <None Include="Assets\Egtd\Prefabs\Deck\bchara\skeleton.json.txt" />
+     <None Include="Assets\Quest_Spine\Story_Quest\skeleton.atlas.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_passcode_0.xml" />
+     <None Include="Assets\Egtd\Font\UnitInfo\unitinfo_b.fnt" />
+     <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+     <None Include="Assets\Spine\spine-unity\Shaders\SkeletonLit.shader" />
+     <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
+     <None Include="Assets\Plugins\Android\ResourcesLibrary\res\drawable\btn_topnav_service.xml" />
+     <None Include="Assets\Egtd\Prefabs\LoginBonus\effect\skeleton.atlas.txt" />
+     <None Include="Assets\spine01\MyPage\skeleton.atlas.txt" />
+ <Reference Include="UnityEngine.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/NPOI/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/NPOI/Plugins/NPOI.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OOXML">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/NPOI/Plugins/NPOI.OOXML.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OpenXml4Net">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/NPOI/Plugins/NPOI.OpenXml4Net.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OpenXmlFormats">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/NPOI/Plugins/NPOI.OpenXmlFormats.dll</HintPath>
+ </Reference>
+ <Reference Include="DMM.Unity">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/Plugins/DMM/DMM.Unity.dll</HintPath>
+ </Reference>
+ <Reference Include="LitJson">
+ <HintPath>C:/Users/syuri/Documents/PokerAndCoinPusher/Assets/Plugins/DMM/LitJson.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

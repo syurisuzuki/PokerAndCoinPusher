@@ -6,11 +6,11 @@ using System.Collections;
 /// </summary>
 public class Cardparent : MonoBehaviour {
 
-	public Card card;
+	//public Card card;
 
 	// Use this for initialization
 	void Start () {
-		card = GameObject.FindObjectOfType<Card>();
+		//card = GameObject.FindObjectOfType<Card>();
 	}
 	
 	// Update is called once per frame

@@ -23,14 +23,14 @@ public class CardInfo : MonoBehaviour {
 	public Sprite realcard;
 	public Sprite Cardback;
 
-	public Card cardm;
+	//public Card cardm;
 	public GameObject Cdc;
 // Use this for initialization
 	void Start () {
 
 		MainSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		realcard = gameObject.GetComponent<SpriteRenderer> ().sprite;
-		cardm = FindObjectOfType<Card>();
+		//cardm = FindObjectOfType<Card>();
 		anim = GetComponent<Animator> ();
 		touched = false;
 		MainSpriteRenderer.sprite = Cardback;

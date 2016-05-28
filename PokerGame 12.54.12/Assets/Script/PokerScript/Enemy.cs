@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -10,7 +11,7 @@ using System.Linq;
 public class Enemy : MonoBehaviour {
 
 	public Card carde;
-	public Judge judge;
+	//public Judge judge;
 	//ゲームの親か
 	//[SerializeField] bool IsParent = false;
 
@@ -43,7 +44,7 @@ public class Enemy : MonoBehaviour {
 		//MainSpriteRenderer.sprite = Faces[9];
 				//coment.text = "よろしくね！";
 
-		judge = GetComponent<Judge> ();
+		//judge = GetComponent<Judge> ();
 		carde = FindObjectOfType<Card>();
 	}
 
@@ -344,3 +345,4 @@ public class Enemy : MonoBehaviour {
 	}
 
 }
+**/
